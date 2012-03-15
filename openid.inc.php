@@ -91,7 +91,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 
 	/* All users have the same trusted sites */
 	public function getTrustedSites($id) {
-		$domains = array('novell.com', 'opensuse.org', 'susestudio.com', 'suse.de', 'suse.cz', 'qa.suse.cz', 'istudio.nue.novell.com' );
+		$domains = array('novell.com', 'opensuse.org', 'susestudio.com', 'suse.de', 'suse.cz', 'qa.suse.cz', 'istudio.nue.suse.com' );
 		$sites = array();
 		foreach ($domains as $d) {
 			$sites['http://'.$d.'/'] = true;
