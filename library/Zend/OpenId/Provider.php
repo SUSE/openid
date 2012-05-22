@@ -568,45 +568,21 @@ class Zend_OpenId_Provider
         /* Check if user trusts to the consumer */
         $trusted = null;
         $sites = $this->_storage->getTrustedSites($params['openid_identity']);
-	 //var_dump($sites);
+	    //var_dump($sites);
         if (isset($params['openid_return_to'])) {
             $root = $params['openid_return_to'];
         }
-        if (isset($sites[$root])) {
-//		trigger_error('$sites[root] is set. trusted is:', E_USER_WARNING);
-            $trusted = $sites[$root];
-		//var_dump($trusted);
-        } else {
-//		trigger_error('$root is:'.$root, E_USER_WARNING);
 
-            foreach ($sites as $site => $t) {
-//		trigger_error('checking: '.$root.' to site: '.$site, E_USER_WARNING);
-
-                if (strpos($root, $site) === 0) {
-//			trigger_error('Setting trusted to: '.$t, E_USER_WARNING);
-
-                    $trusted = $t;
+        foreach ($sites as $site) {
+                 trigger_error('checking for trusted site: '.$root.' matches?: '.$site , E_USER_WARNING);
+                 if ( preg_match($site, $root) > 0 ) {
+                    trigger_error('site matched', E_USER_WARNING);
+                    $trusted = true;
                     break;
-                } else {
-                    /* OpenID 2.0 (9.2) check for realm wild-card matching */
-                    $n = strpos($site, '://*.');
-                    if ($n != false) {
-                        $regex = '/^'
-                               . preg_quote(substr($site, 0, $n+3), '/')
-                               . '[A-Za-z1-9_\.]+?'
-                               . preg_quote(substr($site, $n+4), '/')
-                               . '/';
-//				trigger_error('checking if root:'.$root.' matches: '.$regex , E_USER_WARNING);
-                        if (preg_match($regex, $root)) {
-//				trigger_error('setting trusted as'.$t, E_USER_WARNING);
-                            $trusted = $t;
-                            break;
-                        }
-                    }
-                }
-            }
+                 }
         }
-//die();
+
+
         if (is_array($trusted)) {
 //		trigger_error('$tusted is an array', E_USER_WARNING);
             if (!Zend_OpenId_Extension::forAll($extensions, 'checkTrustData', $trusted)) {

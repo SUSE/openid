@@ -91,19 +91,14 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 
 	/* All users have the same trusted sites */
 	public function getTrustedSites($id) {
-		$domains = array('novell.com', 'opensuse.org', 'susestudio.com', 'suse.de', 'suse.cz', 'qa.suse.cz', 'istudio.nue.suse.com' );
-		$sites = array();
-		foreach ($domains as $d) {
-			$sites['http://'.$d.'/'] = true;
-			$sites['https://'.$d.'/'] = true;
-			$sites['http://*.'.$d.'/'] = true;
-			$sites['https://*.'.$d.'/'] = true;
-		}
-		// All other sites starting are not trusted
-		// We assume $id is a url starting with h(ttp)
-		$sites['h'] = false;
-		
-		return $sites;
+		$site_regexps = array('/https?:\/\/[\w\.]*novell.com[:\d]*\//',
+		                      '/https?:\/\/[\w\.]*opensuse.org[:\d]*\//',
+		                      '/https?:\/\/[\w\.]*susestudio.com[:\d]*\//',
+		                      '/https?:\/\/[\w\.]*suse.de[:\d]*\//',
+		                      '/https?:\/\/[\w\.]*suse.cz[:\d]*\//',
+		                      '/https?:\/\/[\w\.]*suse.com[:\d]*\//' );
+
+		return $sites_regexps;
 	}
 
 	/* We have a hardcoded list of trusted sites, so fail */
