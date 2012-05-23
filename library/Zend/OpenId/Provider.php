@@ -346,7 +346,6 @@ class Zend_OpenId_Provider
             }
         }
         $version = 1.1;
-	//die(var_dump($params));
         if (isset($params['openid_ns']) &&
             $params['openid_ns'] == Zend_OpenId::NS_2_0) {
             $version = 2.0;
@@ -521,7 +520,6 @@ class Zend_OpenId_Provider
             $ret['openid.ns'] = Zend_OpenId::NS_2_0;
         }
         $root = $this->getSiteRoot($params);
-	
         if ($root === false) {
             return false;
         }
@@ -568,33 +566,42 @@ class Zend_OpenId_Provider
         /* Check if user trusts to the consumer */
         $trusted = null;
         $sites = $this->_storage->getTrustedSites($params['openid_identity']);
-	    //var_dump($sites);
         if (isset($params['openid_return_to'])) {
             $root = $params['openid_return_to'];
         }
-
-        foreach ($sites as $site) {
-                 trigger_error('checking for trusted site: '.$root.' matches?: '.$site , E_USER_WARNING);
-                 if ( preg_match($site, $root) > 0 ) {
-                    trigger_error('site matched', E_USER_WARNING);
-                    $trusted = true;
+        if (isset($sites[$root])) {
+            $trusted = $sites[$root];
+        } else {
+            foreach ($sites as $site => $t) {
+                if (strpos($root, $site) === 0) {
+                    $trusted = $t;
                     break;
-                 }
+                } else {
+                    /* OpenID 2.0 (9.2) check for realm wild-card matching */
+                    $n = strpos($site, '://*.');
+                    if ($n != false) {
+                        $regex = '/^'
+                               . preg_quote(substr($site, 0, $n+3), '/')
+                               . '[A-Za-z1-9_\.]+?'
+                               . preg_quote(substr($site, $n+4), '/')
+                               . '/';
+                        if (preg_match($regex, $root)) {
+                            $trusted = $t;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
-
         if (is_array($trusted)) {
-//		trigger_error('$tusted is an array', E_USER_WARNING);
             if (!Zend_OpenId_Extension::forAll($extensions, 'checkTrustData', $trusted)) {
-//		trigger_error('$tusted is now null', E_USER_WARNING);
-
                 $trusted = null;
             }
         }
 
         if ($trusted === false) {
             $ret['openid.mode'] = 'cancel';
-		die("5");
             return $ret;
         } else if (is_null($trusted)) {
             /* Redirect to Server Trust Screen */
@@ -621,6 +628,7 @@ class Zend_OpenId_Provider
                 return true;
             }
         }
+
         return $this->_respond($version, $ret, $params, $extensions);
     }
 
