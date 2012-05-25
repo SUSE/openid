@@ -44,6 +44,7 @@ class TrustedSites{
 			'suse.de',
 			'suse.cz',
 			'qa.suse.cz',
+			'happy-customer.heroku.com/openid/samples',//Staging system for suse dev team
 	);
 }
 define ("HEADER_USERNAME", "x-username");
