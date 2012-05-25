@@ -1,6 +1,5 @@
 <?php
 
-
 /* Our storageless implementation */
 class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 {
@@ -24,9 +23,8 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function hasUser($id) {
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log('iChain OpenID hasUser called: '.E_USER_WARNING, Zend_Log::ERR);
+			getLogger()->log('iChain OpenID hasUser called: '.E_USER_WARNING, Zend_Log::INFO);
 		}
-		trigger_error('iChain OpenID hasUser called', E_USER_WARNING);
 		return true;
 	}
  
@@ -43,7 +41,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	/* All users have the same trusted sites */
 	public function getTrustedSites($id) {
 		$sites = array();
-		foreach (TrustedSites::DOMAINS as $d) {
+		foreach (TrustedSites::$DOMAINS as $d) {
 			$sites['http://'.$d.'/'] = true;
 			$sites['https://'.$d.'/'] = true;
 			$sites['http://*.'.$d.'/'] = true;

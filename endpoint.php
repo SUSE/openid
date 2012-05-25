@@ -3,6 +3,7 @@ require_once 'openid.inc.php';
 getLogger()->log("endpoint", Zend_Log::DEBUG);
 $provider = new iChain_OpenId_Provider('secure/', 'trust.php');
 
+getLogger()->log("endpoint-- get: ".print_r($_GET, true)." post: ".print_r($_POST, true), Zend_Log::DEBUG);
 $ret = $provider->handle();
 getLogger()->log("server->handle()\n".$ret, Zend_Log::DEBUG);
 header('Content-Type: text/plain; charset=UTF-8');

@@ -4,12 +4,13 @@ $status = "";
 if (isset($_POST['openid_action']) &&
 		$_POST['openid_action'] == "login" &&
 		!empty($_POST['openid_identifier'])) {
-
+	echo "Try to log in";
 	$consumer = new Zend_OpenId_Consumer();
 	if (!$consumer->login($_POST['openid_identifier'])) {
 		$status = "OpenID login failed.";
 	}
 } else if (isset($_GET['openid_mode'])) {
+	echo "Authenticate Result";
 	if ($_GET['openid_mode'] == "id_res") {
 		$consumer = new Zend_OpenId_Consumer();
 		if ($consumer->verify($_GET, $id)) {
@@ -28,11 +29,11 @@ if (isset($_POST['openid_action']) &&
 	<?php echo "$status<br>" ?>
 	<form method="post">
 		<fieldset>
-			<legend>OpenID Login Form</legend>
-			<input type="text" name="openid_identifier" value="http://alanbdee.myopenid.com/" /> 
+			<legend>Set login server:</legend>
+			<input type="text" name="openid_identifier" value="http://<?php echo $_SERVER['SERVER_NAME'];?>/openid/" /> 
 			<input type="submit" name="openid_action" value="login" />
 		</fieldset>
 	</form>
-	<a href="authedpage.php">View Page that requries Authorization</a>
+	<p>For development purposes </p>
 </body>
 </html>

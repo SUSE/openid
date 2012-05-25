@@ -1,0 +1,106 @@
+2012-05-25T13:35:01-06:00 ERR (3): Uncaught Exception: Priority must be an integer
+2012-05-25T13:35:01-06:00 DEBUG (7): Exception Output: Zend_Log_Exception Object
+(
+    [_previous:Zend_Exception:private] => 
+    [message:protected] => Priority must be an integer
+    [string:Exception:private] => 
+    [code:protected] => 0
+    [file:protected] => /usr/local/zend/share/ZendFramework/library/Zend/Log/Filter/Priority.php
+    [line:protected] => 59
+    [trace:Exception:private] => Array
+        (
+            [0] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                    [line] => 42
+                    [function] => __construct
+                    [class] => Zend_Log_Filter_Priority
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => LOG_PRIORITY
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                    [line] => 64
+                    [function] => getLogger
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/endpoint.php
+                    [line] => 2
+                    [args] => Array
+                        (
+                            [0] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                        )
+
+                    [function] => require_once
+                )
+
+        )
+
+    [previous:Exception:private] => 
+)
+
+2012-05-25T13:35:17-06:00 ERR (3): Uncaught Exception: Priority must be an integer
+2012-05-25T13:35:17-06:00 DEBUG (7): Exception Output: Zend_Log_Exception Object
+(
+    [_previous:Zend_Exception:private] => 
+    [message:protected] => Priority must be an integer
+    [string:Exception:private] => 
+    [code:protected] => 0
+    [file:protected] => /usr/local/zend/share/ZendFramework/library/Zend/Log/Filter/Priority.php
+    [line:protected] => 59
+    [trace:Exception:private] => Array
+        (
+            [0] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                    [line] => 42
+                    [function] => __construct
+                    [class] => Zend_Log_Filter_Priority
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => LOG_PRIORITY
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                    [line] => 64
+                    [function] => getLogger
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [file] => /home/alan/php/workspace/novell-openid/src/endpoint.php
+                    [line] => 2
+                    [args] => Array
+                        (
+                            [0] => /home/alan/php/workspace/novell-openid/src/openid.inc.php
+                        )
+
+                    [function] => require_once
+                )
+
+        )
+
+    [previous:Exception:private] => 
+)
+

@@ -12,10 +12,8 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 	{
 		global $logger;
 		if(isset($logger)){
-			$userString = "";
-			print_r($user, $userString);
-			$storageString = "";
-			print_r($storage, $storageString);
+			$userString = print_r($user, true);
+			$storageString = print_r($storage, true);
 			getLogger()->log("Provider Init: \nloginUrl: ".$loginUrl."\ntrustUrl: ".$trustUrl."\nuser: ".$userString."\nstorage: ".$storageString."\nsessionTtl:".$sessionTtl, Zend_Log::DEBUG);	
 		}
 		
@@ -41,4 +39,12 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 
 		return parent::_checkId($version, $params, $immediate, $extensions, $response);
 	}
+	
+	public function getSiteRoot($params)
+	{
+		$site = parent::getSiteRoot($params);
+		getLogger()->log("iChain_Openid_Provider->getSiteRoot. Return ".$site, Zend_Log::DEBUG);
+		return $site;
+	}
+	
 }

@@ -1,4 +1,8 @@
 <?php
+/* Add our library path */
+define("APPLICATION_PATH", dirname(__FILE__));
+add_include_path(APPLICATION_PATH . '/library');
+include(APPLICATION_PATH."/properties.php");
 /* Ensure we have PATH_SEPARATOR defined */
 if (!defined('PATH_SEPARATOR')) {
 	if (isset($_ENV['OS']) && strpos($_ENV['OS'], 'Win') !== false ) {
@@ -23,11 +27,6 @@ function add_include_path ()
 		set_include_path(implode(PATH_SEPARATOR, $paths));
 	}
 }
-function exception_handler($exception) {
-	$exceptionString = print_r($exception, true);
-	getLogger()->log("Uncaught Exception: ".$exception->getMessage(), Zend_Log::ERR);
-	getLogger()->log("Exception Output: ".$exceptionString, Zend_Log::DEBUG);
-}
 function getLogger(){
 	global $logger;
 	if(!isset($logger)){
@@ -39,23 +38,28 @@ function getLogger(){
 	return $logger;
 }
 
-set_exception_handler('exception_handler');
+function myExceptionHandler($exception) {
+	$exceptionString = print_r($exception, true);
+	getLogger()->log("Uncaught Exception: ".$exception->getMessage(), Zend_Log::ERR);
+	getLogger()->log("Exception Output: ".$exceptionString, Zend_Log::DEBUG);
+}
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+	getLogger()->log("Error (".$errno.") ".$errstr." in ".$errfile." (".$errline.")", Zend_Log::ERR);
+}
+set_exception_handler('myExceptionHandler');
+set_error_handler('myErrorHandler', ERROR_LEVEL);
 
-/* Add our library path */
-define("APPLICATION_PATH", dirname(__FILE__));
-add_include_path(APPLICATION_PATH . '/library');
 
 require_once 'Zend/Log.php';
 require_once 'Zend/Log/Writer/Stream.php';
 require_once 'Zend/OpenId/Provider/User/Session.php';
 require_once 'Zend/OpenId/Provider/Storage/File.php';
-include(APPLICATION_PATH."/properties.php");
 
 require_once 'iChain/OpenId/Provider.php';
 require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 
-getLogger()->info("\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']);
+getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']);
 
 
 ?>

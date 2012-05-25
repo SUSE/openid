@@ -2,12 +2,16 @@
 require_once '../openid.inc.php';
 getLogger()->log("secure/index", Zend_Log::DEBUG);
 $isloggedin = false;
+$websyncid = iChain_OpenId_User::_getHeader(HEADER_USERID);
 if ( isset($_SERVER['HTTP_X_WEBIDSYNCHID']) && $_SERVER['HTTP_X_WEBIDSYNCHID'] != '' ){
 	$isloggedin = true;
+} else if($websyncid!=""){
+	$isloggedin = true;
+} else if($_SERVER['SERVER_NAME']=="localhost"){
+	$isloggedin = true;
+	$websyncid = "96176";
 }
-
-getLogger()->log("isUserTrusted: ".$isloggedin, Zend_Log::DEBUG);
-
+getLogger()->log("isUserTrusted: ".($isloggedin?"true":"false")." websyncid: ".$websyncid, Zend_Log::DEBUG);
 
 if ( !($isloggedin) ){
 	//user is not logged in, redirect to login page.
@@ -25,7 +29,7 @@ else {
 	}
 	else {
 		$server = new iChain_OpenId_User();
-		$_GET["nuserid"] = $server->_getHeader('X-Webidsynchid');
+		$_GET["nuserid"] = $websyncid;
 		$serverString = print_r($server, true);
 		getLogger()->log("Get info from iChain_OpenId nuserid=".$_GET["nuserid"].", redirect to /openid/endpoint.php\n".$serverString, Zend_Log::DEBUG);
 		Zend_OpenId::redirect("/openid/endpoint.php",$_GET);

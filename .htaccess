@@ -1,0 +1,7 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteRule ^user/?$ user.php [L]
+<Files user>
+  AcceptPathInfo on
+  SetHandler php5-script
+</Files>

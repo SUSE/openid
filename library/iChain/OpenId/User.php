@@ -18,7 +18,9 @@ class iChain_OpenId_User extends Zend_OpenId_Provider_User
 			$headers = array_change_key_case(apache_request_headers());
 		}
 		$h = strtolower($h);
-		return isset($headers[$h]) ? $headers[$h] : false;
+		$response = isset($headers[$h]) ? $headers[$h] : false;
+		getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): header requested: ".$h." found: ".$response, Zend_Log::DEBUG);		
+		return $response;
 	}
 
 	public function setLoggedInUser($id) {
