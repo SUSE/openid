@@ -17,7 +17,7 @@ getLogger()->log("session: ".$sessionpath." result\n".$session, Zend_Log::DEBUG)
 //die ("Session:".$session."Key:".$key);
 
  
-$userid = iChain_OpenId_User::_getHeader(HEADER_USER);
+$userid = iChain_OpenId_User::_getHeader(HEADER_USERNAME);
 $email = iChain_OpenId_User::_getHeader(HEADER_EMAIL);
 $fname = iChain_OpenId_User::_getHeader(HEADER_FIRST_NAME);
 $lname = iChain_OpenId_User::_getHeader(HEADER_LAST_NAME);

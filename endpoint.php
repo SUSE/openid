@@ -3,8 +3,16 @@ require_once 'openid.inc.php';
 getLogger()->log("endpoint", Zend_Log::DEBUG);
 $provider = new iChain_OpenId_Provider('secure/', 'trust.php');
 
+$sreg = new Zend_OpenId_Extension_Sreg(array(
+        'username' => iChain_OpenId_User::_getHeader(HEADER_USERNAME),
+        'websynchid' => iChain_OpenId_User::_getHeader(HEADER_USERID),
+        'first_name' => iChain_OpenId_User::_getHeader(HEADER_FIRST_NAME),
+        'last_name' => iChain_OpenId_User::_getHeader(HEADER_LAST_NAME),
+        'email' => iChain_OpenId_User::_getHeader(HEADER_EMAIL)
+    ));
+
 getLogger()->log("endpoint-- get: ".print_r($_GET, true)." post: ".print_r($_POST, true), Zend_Log::DEBUG);
-$ret = $provider->handle();
+$ret = $provider->handle(null, $sreg);
 getLogger()->log("server->handle()\n".$ret, Zend_Log::DEBUG);
 header('Content-Type: text/plain; charset=UTF-8');
 if (is_string($ret)) {
