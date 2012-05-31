@@ -9,7 +9,6 @@ class iChain_OpenId_User extends Zend_OpenId_Provider_User
 		if(isset($logger)){
 			getLogger()->log("User Constructed, prefix set: ".$this->_prefix." ", Zend_Log::DEBUG);
 		}
-		
 	}
 
 	public static function _getHeader($h) {
