@@ -139,7 +139,6 @@ class Zend_OpenId_Provider_Storage_File extends Zend_OpenId_Provider_Storage
      */
     public function getAssociation($handle, &$macFunc, &$secret, &$expires)
     {
-    	getLogger()->log(print_r(debug_backtrace(), true), Zend_log::DEBUG);
         $name = $this->_dir . '/assoc_' . md5($handle);
         $lock = @fopen($this->_dir . '/assoc.lock', 'w+');
         if ($lock === false) {
