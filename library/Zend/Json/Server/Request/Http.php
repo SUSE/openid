@@ -14,8 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Json
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Http.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 /**
@@ -26,7 +27,7 @@ require_once 'Zend/Json/Server/Request.php';
 /**
  * @category   Zend
  * @package    Zend_Json
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Json_Server_Request_Http extends Zend_Json_Server_Request
@@ -41,7 +42,7 @@ class Zend_Json_Server_Request_Http extends Zend_Json_Server_Request
      * Constructor
      *
      * Pull JSON request from raw POST body and use to populate request.
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -55,7 +56,7 @@ class Zend_Json_Server_Request_Http extends Zend_Json_Server_Request
 
     /**
      * Get JSON from raw POST body
-     * 
+     *
      * @return string
      */
     public function getRawJson()

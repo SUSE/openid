@@ -15,8 +15,9 @@
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Client.php 24159 2011-06-28 12:30:56Z adamlundrigan $
  */
 
 
@@ -70,7 +71,7 @@ require_once 'Zend/XmlRpc/Fault.php';
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_XmlRpc_Client
@@ -210,7 +211,7 @@ class Zend_XmlRpc_Client
     /**
      * Returns a proxy object for more convenient method calls
      *
-     * @param $namespace  Namespace to proxy or empty string for none
+     * @param string $namespace  Namespace to proxy or empty string for none
      * @return Zend_XmlRpc_Client_ServerProxy
      */
     public function getProxy($namespace = '')
@@ -267,9 +268,12 @@ class Zend_XmlRpc_Client
 
         $http->setHeaders(array(
             'Content-Type: text/xml; charset=utf-8',
-            'User-Agent: Zend_XmlRpc_Client',
             'Accept: text/xml',
         ));
+
+        if ($http->getHeader('user-agent') === null) {
+            $http->setHeaders(array('User-Agent: Zend_XmlRpc_Client'));
+        }
 
         $xml = $this->_lastRequest->__toString();
         $http->setRawData($xml);
@@ -290,14 +294,15 @@ class Zend_XmlRpc_Client
             $response = new Zend_XmlRpc_Response();
         }
         $this->_lastResponse = $response;
-        $this->_lastResponse->loadXml($httpResponse->getBody());
+        $this->_lastResponse->loadXml(trim($httpResponse->getBody()));
     }
 
     /**
      * Send an XML-RPC request to the service (for a specific method)
      *
-     * @param string $method Name of the method we want to call
-     * @param array $params Array of parameters for the method
+     * @param  string $method Name of the method we want to call
+     * @param  array $params Array of parameters for the method
+     * @return mixed
      * @throws Zend_XmlRpc_Client_FaultException
      */
     public function call($method, $params=array())
@@ -312,29 +317,57 @@ class Zend_XmlRpc_Client
                 $success = false;
             }
             if ($success) {
-                foreach ($params as $key => $param) {
-                    if (is_array($param) && empty($param)) {
-                        $type = 'array';
+                $validTypes = array(
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_ARRAY,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_BASE64,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_BOOLEAN,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_DOUBLE,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_I4,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_INTEGER,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_NIL,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_STRING,
+                    Zend_XmlRpc_Value::XMLRPC_TYPE_STRUCT,
+                );
+
+                if (!is_array($params)) {
+                    $params = array($params);
+                }
+
+                foreach ($params as $key => $param)
+                {
+                    if ($param instanceof Zend_XmlRpc_Value) {
+                        continue;
+                    }
+
+                    if (count($signatures) > 1) {
+                        $type = Zend_XmlRpc_Value::getXmlRpcTypeByValue($param);
                         foreach ($signatures as $signature) {
                             if (!is_array($signature)) {
                                 continue;
                             }
-                            if (array_key_exists($key + 1, $signature)) {
-                                $type = $signature[$key + 1];
-                                $type = (in_array($type, array('array', 'struct'))) ? $type : 'array';
-                                break;
+                            if (isset($signature['parameters'][$key])) {
+                                if ($signature['parameters'][$key] == $type) {
+                                    break;
+                                }
                             }
                         }
-                        $params[$key] = array(
-                            'type'  => $type,
-                            'value' => $param
-                        );
+                    } elseif (isset($signatures[0]['parameters'][$key])) {
+                        $type = $signatures[0]['parameters'][$key];
+                    } else {
+                        $type = null;
                     }
+
+                    if (empty($type) || !in_array($type, $validTypes)) {
+                        $type = Zend_XmlRpc_Value::AUTO_DETECT_TYPE;
+                    }
+
+                    $params[$key] = Zend_XmlRpc_Value::getXmlRpcValue($param, $type);
                 }
             }
         }
 
-        $request = new Zend_XmlRpc_Request($method, $params);
+        $request = $this->_createRequest($method, $params);
 
         $this->doRequest($request);
 
@@ -350,5 +383,15 @@ class Zend_XmlRpc_Client
         }
 
         return $this->_lastResponse->getReturnValue();
+    }
+
+    /**
+     * Create request object
+     *
+     * @return Zend_XmlRpc_Request
+     */
+    protected function _createRequest($method, $params)
+    {
+        return new Zend_XmlRpc_Request($method, $params);
     }
 }

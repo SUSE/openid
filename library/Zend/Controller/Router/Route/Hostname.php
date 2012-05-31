@@ -12,10 +12,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
+ * @category   Zend
  * @package    Zend_Controller
  * @subpackage Router
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 9581 2008-06-01 14:08:03Z martel $
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @version    $Id: Hostname.php 24087 2011-05-30 16:39:22Z adamlundrigan $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -27,7 +28,7 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  *
  * @package    Zend_Controller
  * @subpackage Router
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @see        http://manuals.rubyonrails.com/read/chapter/65
  */
@@ -248,7 +249,7 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
      * @param  boolean $reset Whether or not to set route defaults with those provided in $data
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false)
+    public function assemble($data = array(), $reset = false, $encode = false, $partial = false)
     {
         $host = array();
         $flag = false;
@@ -281,7 +282,7 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
         $return = '';
 
         foreach (array_reverse($host, true) as $key => $value) {
-            if ($flag || !isset($this->_variables[$key]) || $value !== $this->getDefault($this->_variables[$key])) {
+            if ($flag || !isset($this->_variables[$key]) || $value !== $this->getDefault($this->_variables[$key]) || $partial) {
                 if ($encode) $value = urlencode($value);
                 $return = '.' . $value . $return;
                 $flag = true;
@@ -301,7 +302,6 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
             }
         }
 
-        $hostname = implode('.', $host);
         $url      = $scheme . '://' . $url;
 
         return $url;

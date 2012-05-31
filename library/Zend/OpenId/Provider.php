@@ -16,9 +16,9 @@
  * @category   Zend
  * @package    Zend_OpenId
  * @subpackage Zend_OpenId_Provider
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Provider.php 12507 2008-11-10 16:29:09Z matthew $
+ * @version    $Id: Provider.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 /**
@@ -37,7 +37,7 @@ require_once "Zend/OpenId/Extension.php";
  * @category   Zend
  * @package    Zend_OpenId
  * @subpackage Zend_OpenId_Provider
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_OpenId_Provider
@@ -514,26 +514,22 @@ class Zend_OpenId_Provider
     protected function _checkId($version, $params, $immediate, $extensions=null,
         Zend_Controller_Response_Abstract $response = null)
     {
-    	$paramsStr = print_r($params, true);
-		getLogger()->log("Provider->_checkId(".$version.", ".$paramsStr.", ".$immediate.", ".$extensions.", ".$response, Zend_Log::DEBUG);
-    	$ret = array();
+        $ret = array();
 
         if ($version >= 2.0) {
             $ret['openid.ns'] = Zend_OpenId::NS_2_0;
         }
         $root = $this->getSiteRoot($params);
-		getLogger()->log("Provider->_checkId (#".__LINE__."): site root: ".$root, Zend_Log::DEBUG);
         if ($root === false) {
             return false;
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         if (isset($params['openid_identity']) &&
             !$this->_storage->hasUser($params['openid_identity'])) {
             $ret['openid.mode'] = ($immediate && $version >= 2.0) ? 'setup_needed': 'cancel';
-            getLogger()->log("Provider->_checkId (#".__LINE__."): return, ret: ".$ret, Zend_Log::DEBUG);
             return $ret;
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         /* Check if user already logged in into the server */
         if (!isset($params['openid_identity']) ||
             $this->_user->getLoggedInUser() !== $params['openid_identity']) {
@@ -554,40 +550,31 @@ class Zend_OpenId_Provider
                 $ret['openid.user_setup_url'] = $this->_loginUrl
                     . (strpos($this->_loginUrl, '?') === false ? '?' : '&')
                     . Zend_OpenId::paramsToQuery($params2);
-                getLogger()->log("Provider->_checkId (#".__LINE__."): return, ret: ".$ret, Zend_Log::DEBUG);
                 return $ret;
             } else {
                 /* Redirect to Server Login Screen */
-                getLogger()->log("Provider->_checkId (#".__LINE__."): redirect: ".$this->_loginUrl, Zend_Log::DEBUG);
-            	Zend_OpenId::redirect($this->_loginUrl, $params2, $response);
+                Zend_OpenId::redirect($this->_loginUrl, $params2, $response);
                 return true;
             }
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         if (!Zend_OpenId_Extension::forAll($extensions, 'parseRequest', $params)) {
             $ret['openid.mode'] = ($immediate && $version >= 2.0) ? 'setup_needed': 'cancel';
-            getLogger()->log("Provider->_checkId (#".__LINE__."): return, ret: ".$ret, Zend_Log::DEBUG);            
             return $ret;
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         /* Check if user trusts to the consumer */
         $trusted = null;
         $sites = $this->_storage->getTrustedSites($params['openid_identity']);
-        $sites_str = print_r($sites, true);
-        getLogger()->log("Provider->_checkId (#".__LINE__."): trusted sites: ".$sites_str, Zend_Log::DEBUG);
         if (isset($params['openid_return_to'])) {
-        	getLogger()->log("Provider->_checkId (#".__LINE__."): override root to specified return to site: ".$params['openid_return_to'], Zend_Log::DEBUG);
             $root = $params['openid_return_to'];
         }
         if (isset($sites[$root])) {
-        	getLogger()->log("Provider->_checkId (#".__LINE__."): site is trusted, explictly set.", Zend_Log::DEBUG);
             $trusted = $sites[$root];
         } else {
             foreach ($sites as $site => $t) {
-            	getLogger()->log("Provider->_checkId (#".__LINE__."): check site: ".$site, Zend_Log::DEBUG);
                 if (strpos($root, $site) === 0) {
                     $trusted = $t;
-                    getLogger()->log("Provider->_checkId (#".__LINE__."): site not set.", Zend_Log::DEBUG);
                     break;
                 } else {
                     /* OpenID 2.0 (9.2) check for realm wild-card matching */
@@ -598,28 +585,25 @@ class Zend_OpenId_Provider
                                . '[A-Za-z1-9_\.]+?'
                                . preg_quote(substr($site, $n+4), '/')
                                . '/';
-                        getLogger()->log("Provider->_checkId (#".__LINE__."): check (root)".$root." for (site)".$site." with (regex)".$regex, Zend_Log::DEBUG);
                         if (preg_match($regex, $root)) {
                             $trusted = $t;
-                            getLogger()->log("Provider->_checkId (#".__LINE__."): pattern matched.", Zend_Log::DEBUG);
                             break;
                         }
                     }
                 }
             }
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         if (is_array($trusted)) {
             if (!Zend_OpenId_Extension::forAll($extensions, 'checkTrustData', $trusted)) {
                 $trusted = null;
             }
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         if ($trusted === false) {
             $ret['openid.mode'] = 'cancel';
-            getLogger()->log("Provider->_checkId (#".__LINE__."): return, ret: ".$ret, Zend_Log::DEBUG);
             return $ret;
-        } else if (is_null($trusted)) {
+        } else if ($trusted === null) {
             /* Redirect to Server Trust Screen */
             $params2 = array();
             foreach ($params as $key => $val) {
@@ -638,15 +622,13 @@ class Zend_OpenId_Provider
                 $ret['openid.user_setup_url'] = $this->_trustUrl
                     . (strpos($this->_trustUrl, '?') === false ? '?' : '&')
                     . Zend_OpenId::paramsToQuery($params2);
-                getLogger()->log("Provider->_checkId (#".__LINE__."): return, ret: ".$ret, Zend_Log::DEBUG);
                 return $ret;
             } else {
-            	getLogger()->log("Provider->_checkId (#".__LINE__."): redirect: ".$this->_trustUrl.", ".$params.", ".$extensions, Zend_Log::DEBUG);
                 Zend_OpenId::redirect($this->_trustUrl, $params2, $response);
                 return true;
             }
         }
-        getLogger()->log("Provider->_checkId (#".__LINE__."):", Zend_Log::DEBUG);
+
         return $this->_respond($version, $ret, $params, $extensions);
     }
 
@@ -788,12 +770,34 @@ class Zend_OpenId_Provider
                 $data .= $params['openid_' . strtr($key,'.','_')]."\n";
             }
         }
-        if (base64_decode($params['openid_sig']) ===
-            Zend_OpenId::hashHmac($macFunc, $data, $secret)) {
+        if ($this->_secureStringCompare(base64_decode($params['openid_sig']),
+            Zend_OpenId::hashHmac($macFunc, $data, $secret))) {
             $ret['is_valid'] = 'true';
         } else {
             $ret['is_valid'] = 'false';
         }
         return $ret;
+    }
+
+    /**
+     * Securely compare two strings for equality while avoided C level memcmp()
+     * optimisations capable of leaking timing information useful to an attacker
+     * attempting to iteratively guess the unknown string (e.g. password) being
+     * compared against.
+     *
+     * @param string $a
+     * @param string $b
+     * @return bool
+     */
+    protected function _secureStringCompare($a, $b)
+    {
+        if (strlen($a) !== strlen($b)) {
+            return false;
+        }
+        $result = 0;
+        for ($i = 0; $i < strlen($a); $i++) {
+            $result |= ord($a[$i]) ^ ord($b[$i]);
+        }
+        return $result == 0;
     }
 }

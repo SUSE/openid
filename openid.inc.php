@@ -50,11 +50,11 @@ set_exception_handler('myExceptionHandler');
 set_error_handler('myErrorHandler', ERROR_LEVEL);
 
 
-require_once 'Zend/Log.php';
-require_once 'Zend/Log/Writer/Stream.php';
-require_once 'Zend/OpenId/Provider/User/Session.php';
-require_once 'Zend/OpenId/Provider/Storage/File.php';
-require_once 'Zend/OpenId/Extension/Sreg.php';
+require_once 'library/Zend/Log.php';
+require_once 'library/Zend/Log/Writer/Stream.php';
+require_once 'library/Zend/OpenId/Provider/User/Session.php';
+require_once 'library/Zend/OpenId/Provider/Storage/File.php';
+require_once 'library/Zend/OpenId/Extension/Sreg.php';
 
 require_once 'iChain/OpenId/Provider.php';
 require_once 'iChain/OpenId/User.php';

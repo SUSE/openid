@@ -16,7 +16,7 @@
  const DEBUG   = 7;  // Debug: debug messages
  * @var unknown_type
  */
-define ("LOG_PRIORITY", 5);
+define ("LOG_PRIORITY", 7);
 define ("LOG_FILE", "/var/log/apps/openid/openidwrapper.log");
 define ("ERROR_LEVEL", E_ALL);
 

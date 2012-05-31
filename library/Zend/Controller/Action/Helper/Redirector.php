@@ -15,14 +15,10 @@
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action_Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Redirector.php 23940 2011-05-02 20:20:40Z matthew $
  */
-
-/** 
- * @see Zend_Controller_Action_Exception
- */
-require_once 'Zend/Controller/Action/Exception.php';
 
 /**
  * @see Zend_Controller_Action_Helper_Abstract
@@ -33,7 +29,7 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action_Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_Helper_Abstract
@@ -70,6 +66,12 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     protected $_useAbsoluteUri = false;
 
     /**
+     * Whether or not to close the session before exiting
+     * @var boolean
+     */
+    protected $_closeSessionOnExit = true;
+
+    /**
      * Retrieve HTTP status code to emit on {@link _redirect()} call
      *
      * @return int
@@ -90,10 +92,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     {
         $code = (int)$code;
         if ((300 > $code) || (307 < $code) || (304 == $code) || (306 == $code)) {
-            /**
-             * @see Zend_Controller_Exception
-             */
-            require_once 'Zend/Controller/Exception.php';
+            require_once 'Zend/Controller/Action/Exception.php';
             throw new Zend_Controller_Action_Exception('Invalid redirect HTTP status code (' . $code  . ')');
         }
 
@@ -159,6 +158,29 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
+     * Retrieve flag for whether or not {@link redirectAndExit()} shall close the session before
+     * exiting.
+     *
+     * @return boolean
+     */
+    public function getCloseSessionOnExit()
+    {
+        return $this->_closeSessionOnExit;
+    }
+
+    /**
+     * Set flag for whether or not {@link redirectAndExit()} shall close the session before exiting.
+     *
+     * @param  boolean $flag
+     * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
+     */
+    public function setCloseSessionOnExit($flag)
+    {
+        $this->_closeSessionOnExit = ($flag) ? true : false;
+        return $this;
+    }
+
+    /**
      * Return use absolute URI flag
      *
      * @return boolean
@@ -193,7 +215,10 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
             $port  = (isset($_SERVER['SERVER_PORT'])?$_SERVER['SERVER_PORT']:80);
             $uri   = $proto . '://' . $host;
             if ((('http' == $proto) && (80 != $port)) || (('https' == $proto) && (443 != $port))) {
-                $uri .= ':' . $port;
+                // do not append if HTTP_HOST already contains port
+                if (strrchr($host, ':') === false) {
+                    $uri .= ':' . $port;
+                }
             }
             $url = $uri . '/' . ltrim($url, '/');
         }
@@ -256,8 +281,8 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
 
         if (null === $module) {
             $module = $curModule;
-        } 
-        
+        }
+
         if ($module == $dispatcher->getDefaultModule()) {
             $module = '';
         }
@@ -269,9 +294,9 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
             }
         }
 
-        $params['module']     = $module;
-        $params['controller'] = $controller;
-        $params['action']     = $action;
+        $params[$request->getModuleKey()]     = $module;
+        $params[$request->getControllerKey()] = $controller;
+        $params[$request->getActionKey()]     = $action;
 
         $router = $this->getFrontController()->getRouter();
         $url    = $router->assemble($params, 'default', true);
@@ -325,9 +350,6 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
         // prevent header injections
         $url = str_replace(array("\n", "\r"), '', $url);
 
-        $exit        = $this->getExit();
-        $prependBase = $this->getPrependBase();
-        $code        = $this->getCode();
         if (null !== $options) {
             if (isset($options['exit'])) {
                 $this->setExit(($options['exit']) ? true : false);
@@ -444,7 +466,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
      */
     public function gotoUrlAndExit($url, array $options = array())
     {
-        $this->gotoUrl($url, $options);
+        $this->setGotoUrl($url, $options);
         $this->redirectAndExit();
     }
 
@@ -455,11 +477,13 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
      */
     public function redirectAndExit()
     {
-        // Close session, if started
-        if (class_exists('Zend_Session', false) && Zend_Session::isStarted()) {
-            Zend_Session::writeClose();
-        } elseif (isset($_SESSION)) {
-            session_write_close();
+        if ($this->getCloseSessionOnExit()) {
+            // Close session, if started
+            if (class_exists('Zend_Session', false) && Zend_Session::isStarted()) {
+                Zend_Session::writeClose();
+            } elseif (isset($_SESSION)) {
+                session_write_close();
+            }
         }
 
         $this->getResponse()->sendHeaders();
@@ -485,9 +509,9 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
      * Overloading
      *
      * Overloading for old 'goto', 'setGoto', and 'gotoAndExit' methods
-     * 
-     * @param  string $method 
-     * @param  array $args 
+     *
+     * @param  string $method
+     * @param  array $args
      * @return mixed
      * @throws Zend_Controller_Action_Exception for invalid methods
      */

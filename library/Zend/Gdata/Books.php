@@ -16,10 +16,14 @@
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage Books
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Books.php 23805 2011-03-16 00:55:40Z tjohns $
  */
 
+/**
+ * @see Zend_Gdata
+ */
 require_once 'Zend/Gdata.php';
 
 /**
@@ -53,14 +57,14 @@ require_once 'Zend/Gdata/Books/VolumeFeed.php';
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage Books
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Gdata_Books extends Zend_Gdata
 {
-    const VOLUME_FEED_URI = 'http://books.google.com/books/feeds/volumes';
-    const MY_LIBRARY_FEED_URI = 'http://books.google.com/books/feeds/users/me/collections/library/volumes';
-    const MY_ANNOTATION_FEED_URI = 'http://books.google.com/books/feeds/users/me/volumes';
+    const VOLUME_FEED_URI = 'https://books.google.com/books/feeds/volumes';
+    const MY_LIBRARY_FEED_URI = 'https://books.google.com/books/feeds/users/me/collections/library/volumes';
+    const MY_ANNOTATION_FEED_URI = 'https://books.google.com/books/feeds/users/me/volumes';
     const AUTH_SERVICE_NAME = 'print';
 
     /**

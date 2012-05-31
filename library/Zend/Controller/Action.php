@@ -14,23 +14,33 @@
  *
  * @category   Zend
  * @package    Zend_Controller
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Action.php 24253 2011-07-22 00:15:05Z adamlundrigan $
  */
 
-/** Zend_Controller_Action_HelperBroker */
+/**
+ * @see Zend_Controller_Action_HelperBroker
+ */
 require_once 'Zend/Controller/Action/HelperBroker.php';
 
-/** Zend_Controller_Front */
+/**
+ * @see Zend_Controller_Action_Interface
+ */
+require_once 'Zend/Controller/Action/Interface.php';
+
+/**
+ * @see Zend_Controller_Front
+ */
 require_once 'Zend/Controller/Front.php';
 
 /**
  * @category   Zend
  * @package    Zend_Controller
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_Controller_Action
+abstract class Zend_Controller_Action implements Zend_Controller_Action_Interface
 {
     /**
      * @var array of existing class methods
@@ -495,14 +505,18 @@ abstract class Zend_Controller_Action
                 $this->_classMethods = get_class_methods($this);
             }
 
-            // preDispatch() didn't change the action, so we can continue
-            if ($this->getInvokeArg('useCaseSensitiveActions') || in_array($action, $this->_classMethods)) {
-                if ($this->getInvokeArg('useCaseSensitiveActions')) {
-                    trigger_error('Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
+            // If pre-dispatch hooks introduced a redirect then stop dispatch
+            // @see ZF-7496
+            if (!($this->getResponse()->isRedirect())) {
+                // preDispatch() didn't change the action, so we can continue
+                if ($this->getInvokeArg('useCaseSensitiveActions') || in_array($action, $this->_classMethods)) {
+                    if ($this->getInvokeArg('useCaseSensitiveActions')) {
+                        trigger_error('Using case sensitive actions without word separators is deprecated; please do not rely on this "feature"');
+                    }
+                    $this->$action();
+                } else {
+                    $this->__call($action, array());
                 }
-                $this->$action();
-            } else {
-                $this->__call($action, array());
             }
             $this->postDispatch();
         }
@@ -570,7 +584,7 @@ abstract class Zend_Controller_Action
     protected function _getParam($paramName, $default = null)
     {
         $value = $this->getRequest()->getParam($paramName);
-        if ((null == $value) && (null !== $default)) {
+         if ((null === $value || '' === $value) && (null !== $default)) {
             $value = $default;
         }
 

@@ -15,8 +15,8 @@
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: PartialLoop.php 13032 2008-12-05 02:43:17Z sidhighwind $
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @version    $Id: PartialLoop.php 23775 2011-03-01 17:25:24Z ralph $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -29,7 +29,7 @@ require_once 'Zend/View/Helper/Partial.php';
  *
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_View_Helper_PartialLoop extends Zend_View_Helper_Partial
@@ -71,7 +71,9 @@ class Zend_View_Helper_PartialLoop extends Zend_View_Helper_Partial
             && (is_object($model) && !method_exists($model, 'toArray'))
         ) {
             require_once 'Zend/View/Helper/Partial/Exception.php';
-            throw new Zend_View_Helper_Partial_Exception('PartialLoop helper requires iterable data');
+            $e = new Zend_View_Helper_Partial_Exception('PartialLoop helper requires iterable data');
+            $e->setView($this->view);
+            throw $e;
         }
 
         if (is_object($model)

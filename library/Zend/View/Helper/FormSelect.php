@@ -15,8 +15,9 @@
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: FormSelect.php 24158 2011-06-27 15:31:54Z ezimuel $
  */
 
 
@@ -32,7 +33,7 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
@@ -66,7 +67,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info); // name, id, value, attribs, options, listsep, disable
 
-        // force $value to array so we can compare multiple values to multiple 
+        // force $value to array so we can compare multiple values to multiple
         // options; also ensure it's a string for comparison purposes.
         $value = array_map('strval', (array) $value);
 
@@ -93,7 +94,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
                 $multiple = '';
             }
             unset($attribs['multiple']);
-        } 
+        }
 
         // now start building the XHTML.
         $disabled = '';
@@ -111,15 +112,22 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
                 . ">\n    ";
 
         // build the list of options
-        $list = array();
+        $list       = array();
+        $translator = $this->getTranslator();
         foreach ((array) $options as $opt_value => $opt_label) {
             if (is_array($opt_label)) {
                 $opt_disable = '';
                 if (is_array($disable) && in_array($opt_value, $disable)) {
                     $opt_disable = ' disabled="disabled"';
                 }
+                if (null !== $translator) {
+                    $opt_value = $translator->translate($opt_value);
+                }
+                $opt_id = ' id="' . $this->view->escape($id) . '-optgroup-'
+                        . $this->view->escape($opt_value) . '"';
                 $list[] = '<optgroup'
                         . $opt_disable
+                        . $opt_id
                         . ' label="' . $this->view->escape($opt_value) .'">';
                 foreach ($opt_label as $val => $lab) {
                     $list[] = $this->_build($val, $lab, $value, $disable);

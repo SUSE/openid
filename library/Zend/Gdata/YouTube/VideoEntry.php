@@ -16,9 +16,9 @@
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage YouTube
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: VideoEntry.php 13360 2008-12-18 22:54:14Z jhartmann $
+ * @version    $Id: VideoEntry.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 /**
@@ -92,7 +92,7 @@ require_once 'Zend/Gdata/YouTube/Extension/Location.php';
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage YouTube
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
@@ -836,7 +836,7 @@ class Zend_Gdata_YouTube_VideoEntry extends Zend_Gdata_YouTube_MediaEntry
             $keywords = $this->getMediaGroup()->getKeywords();
             $keywordsString = $keywords->getText();
             if (strlen(trim($keywordsString)) > 0) {
-                return split('(, *)|,', $keywordsString);
+                return preg_split('/(, *)|,/', $keywordsString);
             }
         }
         return array();

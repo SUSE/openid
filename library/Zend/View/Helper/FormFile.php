@@ -15,8 +15,9 @@
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: FormFile.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 
@@ -32,7 +33,7 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @category   Zend
  * @package    Zend_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement
@@ -59,7 +60,7 @@ class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement
         $disabled = '';
         if ($disable) {
             $disabled = ' disabled="disabled"';
-        } 
+        }
 
         // XHTML or HTML end tag?
         $endTag = ' />';
@@ -72,7 +73,7 @@ class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement
                 . ' name="' . $this->view->escape($name) . '"'
                 . ' id="' . $this->view->escape($id) . '"'
                 . $disabled
-                . $this->_htmlAttribs($attribs) 
+                . $this->_htmlAttribs($attribs)
                 . $endTag;
 
         return $xhtml;

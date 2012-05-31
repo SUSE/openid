@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage Gbase
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Entry.php 3941 2007-03-14 21:36:13Z darby $
+ * @version    $Id: BaseAttribute.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 /**
@@ -31,7 +31,7 @@ require_once 'Zend/Gdata/App/Extension/Element.php';
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage Gbase
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Gdata_Gbase_Extension_BaseAttribute extends Zend_Gdata_App_Extension_Element

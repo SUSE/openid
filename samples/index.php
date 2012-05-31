@@ -34,6 +34,6 @@ if (isset($_POST['openid_action']) &&
 			<input type="submit" name="openid_action" value="login" />
 		</fieldset>
 	</form>
-	<p>For development purposes </p>
+	<p>For development purposes. The text box allows you to set which openid server to hit. By default it will come back to itself. However, to test the login process of an external server enter that server. You should get a "Authenticate Result VALID" response.</p>
 </body>
 </html>
