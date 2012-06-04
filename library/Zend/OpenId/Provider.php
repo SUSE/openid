@@ -514,6 +514,11 @@ class Zend_OpenId_Provider
     protected function _checkId($version, $params, $immediate, $extensions=null,
         Zend_Controller_Response_Abstract $response = null)
     {
+    	if(function_exists("getLogger")){
+    		$priority = ZEND_LOG::DEBUG;
+    		getLogger()->log("Start Provider CheckID method", $priority);
+    	}
+    	 
         $ret = array();
 
         if ($version >= 2.0) {
@@ -566,13 +571,23 @@ class Zend_OpenId_Provider
         /* Check if user trusts to the consumer */
         $trusted = null;
         $sites = $this->_storage->getTrustedSites($params['openid_identity']);
+        if(function_exists("getLogger")){
+        	getLogger()->log("Check Trusted sites: ".print_r($sites, true), $priority);
+        }
+        
         if (isset($params['openid_return_to'])) {
             $root = $params['openid_return_to'];
         }
         if (isset($sites[$root])) {
+        	if(function_exists("getLogger")){
+        		getLogger()->log("Exact site found: ".$site, $priority);
+        	}
             $trusted = $sites[$root];
         } else {
-            foreach ($sites as $site => $t) {
+            if(function_exists("getLogger")){
+        		getLogger()->log("Exact site note found. Try regexp to match ".$root, $priority);
+        	}
+        	foreach ($sites as $site => $t) {
                 if (strpos($root, $site) === 0) {
                     $trusted = $t;
                     break;
@@ -585,15 +600,24 @@ class Zend_OpenId_Provider
                                . '[A-Za-z1-9_\.]+?'
                                . preg_quote(substr($site, $n+4), '/')
                                . '/';
+                        if(function_exists("getLogger")){
+        			 		getLogger()->log("RegExp Match: ".$regex." in ".$root, $priority);
+        				}
                         if (preg_match($regex, $root)) {
                             $trusted = $t;
+                            if(function_exists("getLogger")){
+                            	getLogger()->log("#### Found ####", $priority);
+                            }
                             break;
                         }
                     }
                 }
             }
         }
-
+        if(function_exists("getLogger")){
+        	getLogger()->log("Trusted? ".($trusted?"Yes":"Nope, sorry!"), $priority);
+        }
+        
         if (is_array($trusted)) {
             if (!Zend_OpenId_Extension::forAll($extensions, 'checkTrustData', $trusted)) {
                 $trusted = null;

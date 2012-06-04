@@ -46,5 +46,4 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 		getLogger()->log("iChain_Openid_Provider->getSiteRoot. Return ".$site, Zend_Log::DEBUG);
 		return $site;
 	}
-	
 }

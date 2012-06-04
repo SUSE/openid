@@ -19,7 +19,6 @@
 define ("LOG_PRIORITY", 7);
 define ("LOG_FILE", "/var/log/apps/openid/openidwrapper.log");
 define ("ERROR_LEVEL", E_ALL);
-define ("TMP_STORAGE_DIR", "/tmp");
 
 
 define ("OPENID_SERVER", "apexedi.cougarpc.net");
