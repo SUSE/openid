@@ -1,5 +1,8 @@
 <?php
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/../library');
 require_once("../library/Zend/OpenId/Consumer.php");
+
 $status = "";
 if (isset($_POST['openid_action']) &&
 		$_POST['openid_action'] == "login" &&
@@ -37,3 +40,5 @@ if (isset($_POST['openid_action']) &&
 	<p>For development purposes. The text box allows you to set which openid server to hit. By default it will come back to itself. However, to test the login process of an external server enter that server. You should get a "Authenticate Result VALID" response.</p>
 </body>
 </html>
+
+
