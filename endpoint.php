@@ -11,7 +11,7 @@ $sreg = new Zend_OpenId_Extension_Sreg(array(
         'email' => iChain_OpenId_User::_getHeader(HEADER_EMAIL)
     ));
 
-getLogger()->log("endpoint-- get: ".print_r($_GET, true)." post: ".print_r($_POST, true), Zend_Log::DEBUG);
+getLogger()->log("endpoint-- get: ".print_r($_GET, true)." post: ".print_r($_POST, true)." sreg: ".print_r($sreg, true), Zend_Log::DEBUG);
 $ret = $provider->handle(null, $sreg);
 getLogger()->log("server->handle()\n".$ret, Zend_Log::DEBUG);
 header('Content-Type: text/plain; charset=UTF-8');

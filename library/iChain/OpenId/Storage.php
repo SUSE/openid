@@ -6,7 +6,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function __construct(){
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log("Storage Constructed: folder: ".TMP_STORAGE_DIR, Zend_Log::DEBUG);
+			getLogger()->log("Storage Constructed", Zend_Log::DEBUG);
 		}
 		parent::__construct();
 	}

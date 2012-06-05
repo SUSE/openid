@@ -370,6 +370,9 @@ class Zend_OpenId_Consumer_Storage_File extends Zend_OpenId_Consumer_Storage
     {
         $name = $this->_dir . '/discovery_' . md5($id);
         $lock = @fopen($this->_dir . '/discovery.lock', 'w+');
+        if(function_exists("getLogger")){
+        	//getLogger()->log("dir: ".$this->dir." backtrace: ".print_r(debug_backtrace(), true), Zend_Log::DEBUG);
+        }
         if ($lock === false) {
             return false;
         }
