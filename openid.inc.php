@@ -46,8 +46,8 @@ function myExceptionHandler($exception) {
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
 	getLogger()->log("Error (".$errno.") ".$errstr." in ".$errfile." (".$errline.")", Zend_Log::ERR);
 }
-set_exception_handler('myExceptionHandler');
-set_error_handler('myErrorHandler', ERROR_LEVEL);
+//set_exception_handler('myExceptionHandler');
+//set_error_handler('myErrorHandler', ERROR_LEVEL);
 
 
 require_once 'library/Zend/Log.php';
