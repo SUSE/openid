@@ -20,9 +20,11 @@ function add_include_path ()
 			trigger_error("Include path '$path' does not exist or is not a directory", E_USER_WARNING);
 		}
 		$paths = explode(PATH_SEPARATOR, get_include_path());
-		 
 		if (array_search($path, $paths) === false) {
-			array_push($paths, $path);
+			array_unshift($paths, $path);
+			$tmp = $paths[0];
+			$paths[0] = $paths[1];
+			$paths[1] = $tmp;
 		}
 		set_include_path(implode(PATH_SEPARATOR, $paths));
 	}
@@ -50,17 +52,17 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 //set_error_handler('myErrorHandler', ERROR_LEVEL);
 
 
-require_once 'library/Zend/Log.php';
-require_once 'library/Zend/Log/Writer/Stream.php';
-require_once 'library/Zend/OpenId/Provider/User/Session.php';
-require_once 'library/Zend/OpenId/Provider/Storage/File.php';
-require_once 'library/Zend/OpenId/Extension/Sreg.php';
+require_once 'Zend/Log.php';
+require_once 'Zend/Log/Writer/Stream.php';
+require_once 'Zend/OpenId/Provider/User/Session.php';
+require_once 'Zend/OpenId/Provider/Storage/File.php';
+require_once 'Zend/OpenId/Extension/Sreg.php';
 
 require_once 'iChain/OpenId/Provider.php';
 require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 
-getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']);
+getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']."\nApplication Path: ".APPLICATION_PATH."\nInclude Path: ".print_r(explode(PATH_SEPARATOR, get_include_path()), true));
 
 
 ?>

@@ -1,3 +1,4 @@
+asdf
 Options +FollowSymLinks
 RewriteEngine On
 RewriteRule ^user/?$ user.php [L]
