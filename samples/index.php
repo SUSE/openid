@@ -16,10 +16,11 @@ require_once("../library/Zend/OpenId/Consumer.php");
 getLogger()->log("Sample page start", Zend_Log::DEBUG);
 
 $defaultUrls = array(
-	"http://mydevbox.novell.com/openid/",
-	"http://wwwstage.provo.novell.com/openid/",
-	"http://www.novell.com/openid/",
-	"http://badurl.provo.novell.com/openid/",
+		"http://".$_SERVER['SERVER_NAME']."/openid",
+		"http://mydevbox.novell.com/openid/",
+		"http://wwwstage.provo.novell.com/openid/",
+		"http://www.novell.com/openid/",
+		"http://badurl.provo.novell.com/openid/",
 );
 $outputdata = "";
 $status = "";
@@ -59,15 +60,16 @@ if (isset($_POST['openid_action']) &&
 			<legend>Set login server:</legend>
 			<select type=select name="openid_identifier">
 				<?php foreach($defaultUrls as $url):?>
-					<option value="<?php echo $url;?>" <?php echo ($default_server==$url?" selected=selected":"");?>><?php echo $url;?></option>
+				<option value="<?php echo $url;?>" <?php echo ($default_server==$url?" selected=selected":"");?>>
+					<?php echo $url;?>
+				</option>
 				<?php endforeach;?>
-			</select>
-			<input type="submit" name="openid_action" value="login" />
+			</select> <input type="submit" name="openid_action" value="login" />
 		</fieldset>
 	</form>
 	<h2>How to Test</h2>
 	<p>To test the openid login download it from the repository and install on your local machine.</p>
-	<p>Update your local hosts file with the following. This will allow you to see your local machine as a subdomain.</p> 
+	<p>Update your local hosts file with the following. This will allow you to see your local machine as a subdomain.</p>
 	<pre>
 127.0.0.1       mydevbox.novell.com
 127.0.0.1       mydevbox.opensuse.org
@@ -76,19 +78,21 @@ if (isset($_POST['openid_action']) &&
 127.0.0.1       mydevbox.suse.de
 127.0.0.1       mydevbox.suse.cz
 127.0.0.1       mydevbox.qa.suse.cz
-127.0.0.1       happy-customer.heroku.com	</pre>
-<p>Then use the following links to view your local implimentor</p>
-<ul>
-	<li><a href="http://mydevbox.novell.com/openid/samples/">mydevbox.novell.com</a></li>
-	<li><a href="http://mydevbox.opensuse.org/openid/samples/">mydevbox.opensuse.org</a></li>
-	<li><a href="http://mydevbox.suse.com/openid/samples/">mydevbox.suse.com</a></li>
-	<li><a href="http://mydevbox.susestudio.com/openid/samples/">mydevbox.susestudio.com</a></li>
-	<li><a href="http://mydevbox.suse.de/openid/samples/"> mydevbox.suse.de</a></li>
-	<li><a href="http://mydevbox.suse.cz/openid/samples/">mydevbox.suse.cz</a></li>
-	<li><a href="http://mydevbox.qa.suse.cz/openid/samples/">mydevbox.qa.suse.cz</a></li>
-	<li><a href="http://happy-customer.heroku.com/openid/samples/">happy-customer.heroku.com</a></li>
+127.0.0.1       happy-customer.heroku.com
+</pre>
+	<p>Then use the following links to view your local implimentor</p>
+	<ul>
+		<li><a href="http://mydevbox.novell.com/openid/samples/">mydevbox.novell.com</a></li>
+		<li><a href="http://mydevbox.opensuse.org/openid/samples/">mydevbox.opensuse.org</a></li>
+		<li><a href="http://mydevbox.suse.com/openid/samples/">mydevbox.suse.com</a></li>
+		<li><a href="http://mydevbox.susestudio.com/openid/samples/">mydevbox.susestudio.com</a></li>
+		<li><a href="http://mydevbox.suse.de/openid/samples/"> mydevbox.suse.de</a></li>
+		<li><a href="http://mydevbox.suse.cz/openid/samples/">mydevbox.suse.cz</a></li>
+		<li><a href="http://mydevbox.qa.suse.cz/openid/samples/">mydevbox.qa.suse.cz</a></li>
+		<li><a href="http://happy-customer.heroku.com/openid/samples/">happy-customer.heroku.com</a></li>
 	</ul>
-<p>If everything is setup correctly you should see a "Authenticate Result VALID" result at the top. 
+	<p>If everything is setup correctly you should see a "Authenticate Result VALID" result at the top.
+
 </body>
 </html>
 
