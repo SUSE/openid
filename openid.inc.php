@@ -1,6 +1,7 @@
 <?php
 /* Add our library path */
 define("APPLICATION_PATH", dirname(__FILE__));
+error_reporting(E_ALL ^ E_NOTICE);
 add_include_path(APPLICATION_PATH . '/library');
 include(APPLICATION_PATH."/properties.php");
 /* Ensure we have PATH_SEPARATOR defined */
