@@ -3,7 +3,7 @@
 define("APPLICATION_PATH", dirname(__FILE__));
 error_reporting(E_ALL ^ E_NOTICE);
 add_include_path(APPLICATION_PATH . '/library');
-include(APPLICATION_PATH."/properties.php");
+require_once(APPLICATION_PATH."/properties.php");
 /* Ensure we have PATH_SEPARATOR defined */
 if (!defined('PATH_SEPARATOR')) {
 	if (isset($_ENV['OS']) && strpos($_ENV['OS'], 'Win') !== false ) {
@@ -36,10 +36,11 @@ function getLogger(){
 		$writer = new Zend_Log_Writer_Stream(LOG_FILE);
 		$logger = new Zend_Log($writer);
 		$filter = new Zend_Log_Filter_Priority(LOG_PRIORITY);
-		$logger->addFilter($filter);		
+		$logger->addFilter($filter);
 	}
 	return $logger;
 }
+
 
 function myExceptionHandler($exception) {
 	$exceptionString = print_r($exception, true);
@@ -64,6 +65,5 @@ require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 
 getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']."\nApplication Path: ".APPLICATION_PATH."\nInclude Path: ".print_r(explode(PATH_SEPARATOR, get_include_path()), true));
-
 
 ?>

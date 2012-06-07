@@ -19,6 +19,7 @@ $defaultUrls = array(
 		"http://".$_SERVER['SERVER_NAME']."/openid",
 		"http://mydevbox.novell.com/openid/",
 		"http://wwwstage.provo.novell.com/openid/",
+		"http://www.novell.com/openid/novell-openid/",
 		"http://www.novell.com/openid/",
 		"http://badurl.provo.novell.com/openid/",
 );

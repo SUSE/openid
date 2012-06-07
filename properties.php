@@ -17,7 +17,8 @@
  * @var unknown_type
  */
 define ("LOG_PRIORITY", 7);
-define ("LOG_FILE", "/var/log/apps/openid/openidwrapper.log");
+//define ("LOG_FILE", "/var/log/apps/openid/openidwrapper.log");
+define ("LOG_FILE", APPLICATION_PATH."/openidwrapper.log");
 define ("ERROR_LEVEL", E_ALL);
 
 
