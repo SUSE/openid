@@ -12,8 +12,12 @@ $sreg = new iChain_OpenId_Sreg(array(
     ));
 
 getLogger()->log("endpoint-- get: ".print_r($_GET, true)." post: ".print_r($_POST, true)." sreg: ".print_r($sreg, true), Zend_Log::DEBUG);
+
 $ret = $provider->handle(null, $sreg);
+
 getLogger()->log("server->handle()\n".$ret, Zend_Log::DEBUG);
+getLogger()->log("sreg->getProperties()\n".print_r($sreg->getProperties(), true), Zend_Log::DEBUG);
+
 header('Content-Type: text/plain; charset=UTF-8');
 if (is_string($ret)) {
     echo $ret;
