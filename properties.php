@@ -46,7 +46,12 @@ class TrustedSites{
 			'suse.de:3000',
 			'suse.cz',
 			'qa.suse.cz',
-			'happy-customer.heroku.com' //Staging system for suse dev team
+			'happy-customer.heroku.com', //Staging system for suse dev team
+			'localhost', 
+                        'localhost:3000',
+                        '127.0.0.1', 
+                        '127.0.0.1:3000',
+                        '127.0.0.1:31337'
 	);
 }
 define ("HEADER_USERNAME", "x-username");
