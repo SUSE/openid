@@ -63,6 +63,7 @@ require_once 'Zend/OpenId/Extension/Sreg.php';
 require_once 'iChain/OpenId/Provider.php';
 require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
+require_once 'iChain/OpenId/Sreg.php';
 
 getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']."\nApplication Path: ".APPLICATION_PATH."\nInclude Path: ".print_r(explode(PATH_SEPARATOR, get_include_path()), true));
 

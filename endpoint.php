@@ -3,7 +3,7 @@ require_once 'openid.inc.php';
 getLogger()->log("endpoint", Zend_Log::DEBUG);
 $provider = new iChain_OpenId_Provider('secure/', 'trust.php');
 
-$sreg = new Zend_OpenId_Extension_Sreg(array(
+$sreg = new iChain_OpenId_Sreg(array(
         'username' => iChain_OpenId_User::_getHeader(HEADER_USERNAME),
         'websynchid' => iChain_OpenId_User::_getHeader(HEADER_USERID),
         'first_name' => iChain_OpenId_User::_getHeader(HEADER_FIRST_NAME),
