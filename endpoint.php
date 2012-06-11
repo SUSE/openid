@@ -8,6 +8,8 @@ $sreg = new iChain_OpenId_Sreg(array(
         'websynchid' => iChain_OpenId_User::_getHeader(HEADER_USERID),
         'first_name' => iChain_OpenId_User::_getHeader(HEADER_FIRST_NAME),
         'last_name' => iChain_OpenId_User::_getHeader(HEADER_LAST_NAME),
+        'fullname' => iChain_OpenId_User::_getHeader(HEADER_FIRST_NAME) . " " .
+         iChain_OpenId_User::_getHeader(HEADER_LAST_NAME),
         'email' => iChain_OpenId_User::_getHeader(HEADER_EMAIL)
     ));
 
