@@ -5,9 +5,6 @@ require_once(APPLICATION_PATH."/library/Zend/OpenId/Extension/Sreg.php");
 class iChain_OpenId_Sreg extends Zend_OpenId_Extension_Sreg
 {
 
-    private $_policy_url;
-    private $_version;
-
 	public function __construct(array $props=null, $policy_url=null, $version=1.0)
     {
         parent::__construct($props, $policy_url, $version);
@@ -59,6 +56,28 @@ class iChain_OpenId_Sreg extends Zend_OpenId_Extension_Sreg
             $this->_policy_url = $params['openid_sreg_policy_url'];
         } else {
             $this->_policy_url = null;
+        }
+        return true;
+    }
+
+
+    /**
+     * Adds additional SREG data to OpenId 'id_res' response.
+     *
+     * @param array &$params response's var/val pairs
+     * @return bool
+     */
+    public function prepareResponse(&$params)
+    {
+        if (is_array($this->_props) && count($this->_props) > 0) {
+            if ($this->_version >= 1.1) {
+                $params['openid.ns.sreg'] = Zend_OpenId_Extension_Sreg::NAMESPACE_1_1;
+            }
+            foreach (self::getSregProperties() as $prop) {
+                if (!empty($this->_props[$prop])) {
+                    $params['openid.sreg.' . $prop] = $this->_props[$prop];
+                }
+            }
         }
         return true;
     }
