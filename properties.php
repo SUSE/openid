@@ -46,6 +46,7 @@ class TrustedSites{
 			'suse.de:3000',
 			'suse.cz',
 			'qa.suse.cz',
+                        'happy-customer.herokuapp.com',
 			'happy-customer.heroku.com', //Staging system for suse dev team
 			'localhost', 
                         'localhost:3000',
