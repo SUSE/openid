@@ -33,7 +33,7 @@ if($_SERVER['HTTPS']=='on'){
 //define ("OPENID_PASSWORD", "sup3rs3cur3p@ssw0rd4n0v3110p3n1ds3rv3r@n0v311.c0m");
 
 /**
- * This olds a static list of authorized sites. a test for "novell.com" will match "www.novell.com" or "innerweb.novell.com" etc. 
+ * This adds a static list of authorized sites. a test for "novell.com" will match "www.novell.com" or "innerweb.novell.com" etc. 
  * Here is a sample of what is matched for "novell.com":
  * check 
  * 	url: 			http://istudio.nue.suse.com/openid/samples/ 
