@@ -1,13 +1,13 @@
 <?php
 class iChain_OpenId_User extends Zend_OpenId_Provider_User
 {
-	private $_prefix = "http://wwwstage.provo.novell.com/openid/user/";
+	private $_prefix;
 
 	public function __construct(){
-		$this->_prefix = "http://".$_SERVER['SERVER_NAME']."/openid/user/";
+		$this->_prefix = HTTP_HOST.$_SERVER['SERVER_NAME']."/openid/user/";
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log("User Constructed, prefix set: ".$this->_prefix." ", Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): User Constructed, prefix set: ".$this->_prefix." ", Zend_Log::DEBUG);
 		}
 	}
 

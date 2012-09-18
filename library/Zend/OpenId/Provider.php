@@ -337,7 +337,7 @@ class Zend_OpenId_Provider
 			Zend_Controller_Response_Abstract $response = null)
 	{
 		if(function_exists("getLogger")){
-			getLogger()->log("Start Handle, params: ".print_r($params, true), Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Start Handle, params: ".print_r($params, true), Zend_Log::DEBUG);
 		}
 		if ($params === null) {
 			if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -356,7 +356,7 @@ class Zend_OpenId_Provider
 		if (isset($params['openid_mode'])) {
 			if ($params['openid_mode'] == 'associate') {
 				if(function_exists("getLogger")){
-					getLogger()->log("Mode Associate", Zend_Log::DEBUG);
+					getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Mode Associate", Zend_Log::DEBUG);
 				}
 				$response = $this->_associate($version, $params);
 				$ret = '';
@@ -366,7 +366,7 @@ class Zend_OpenId_Provider
 				return $ret;
 			} else if ($params['openid_mode'] == 'checkid_immediate') {
 				if(function_exists("getLogger")){
-					getLogger()->log("Mode Immediate", Zend_Log::DEBUG);
+					getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Mode Immediate", Zend_Log::DEBUG);
 				}
 				$ret = $this->_checkId($version, $params, 1, $extensions, $response);
 				if (is_bool($ret)) return $ret;
@@ -376,7 +376,7 @@ class Zend_OpenId_Provider
 				return true;
 			} else if ($params['openid_mode'] == 'checkid_setup') {
 				if(function_exists("getLogger")){
-					getLogger()->log("Mode Setup", Zend_Log::DEBUG);
+					getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Mode Setup", Zend_Log::DEBUG);
 				}
 				$ret = $this->_checkId($version, $params, 0, $extensions, $response);
 				if (is_bool($ret)) return $ret;
@@ -386,7 +386,7 @@ class Zend_OpenId_Provider
 				return true;
 			} else if ($params['openid_mode'] == 'check_authentication') {
 				if(function_exists("getLogger")){
-					getLogger()->log("Mode Authentication", Zend_Log::DEBUG);
+					getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Mode Authentication", Zend_Log::DEBUG);
 				}
 				$response = $this->_checkAuthentication($version, $params);
 				$ret = '';
@@ -531,7 +531,7 @@ class Zend_OpenId_Provider
 	{
 		if(function_exists("getLogger")){
 			$priority = ZEND_LOG::DEBUG;
-			getLogger()->log("Start Provider CheckID method", $priority);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Start Provider CheckID method", $priority);
 		}
 
 		$ret = array();
@@ -586,21 +586,18 @@ class Zend_OpenId_Provider
 		/* Check if user trusts to the consumer */
 		$trusted = null;
 		$sites = $this->_storage->getTrustedSites($params['openid_identity']);
-		if(function_exists("getLogger")){
-			getLogger()->log("Check Trusted sites: ".print_r($sites, true), $priority);
-		}
 
 		if (isset($params['openid_return_to'])) {
 			$root = $params['openid_return_to'];
 		}
 		if (isset($sites[$root])) {
 			if(function_exists("getLogger")){
-				getLogger()->log("Exact site found: ".$site, $priority);
+				getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Exact site found: ".$site, $priority);
 			}
 			$trusted = $sites[$root];
 		} else {
 			if(function_exists("getLogger")){
-				getLogger()->log("Exact site note found. Try regexp to match ".$root, $priority);
+				getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Exact site note found. Try regexp to match ".$root, $priority);
 			}
 			foreach ($sites as $site => $t) {
 				if (strpos($root, $site) === 0) {
@@ -616,12 +613,12 @@ class Zend_OpenId_Provider
 										. preg_quote(substr($site, $n+4), '/')
 										. '/';
 						if(function_exists("getLogger")){
-							getLogger()->log("RegExp Match: ".$regex." in ".$root, $priority);
+							getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): RegExp Match: ".$regex." in ".$root, $priority);
 						}
 						if (preg_match($regex, $root)) {
 							$trusted = $t;
 							if(function_exists("getLogger")){
-								getLogger()->log("#### Found ####", $priority);
+								getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): #### Found ####", $priority);
 							}
 							break;
 						}
@@ -630,7 +627,7 @@ class Zend_OpenId_Provider
 			}
 		}
 		if(function_exists("getLogger")){
-			getLogger()->log("Trusted? ".($trusted?"Yes":"Nope, sorry!"), $priority);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Trusted? ".($trusted?"Yes":"Nope, sorry!"), $priority);
 		}
 
 		if (is_array($trusted)) {
@@ -714,7 +711,7 @@ class Zend_OpenId_Provider
 	{
 		if(function_exists("getLogger")){
 			$priority = Zend_Log::DEBUG;
-			getLogger()->log("Start _respone: version: ".$version." ret: ".print_r($ret, true)." params: ".print_r($params, true), $priority);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Start _respone: version: ".$version." ret: ".print_r($ret, true)." params: ".print_r($params, true), $priority);
 		}
 		if (empty($params['openid_assoc_handle']) ||
 				!$this->_storage->getAssociation($params['openid_assoc_handle'],
@@ -773,7 +770,7 @@ class Zend_OpenId_Provider
 		$ret['openid.sig'] = base64_encode(
 				Zend_OpenId::hashHmac($macFunc, $data, $secret));
 		if(function_exists("getLogger")){
-			getLogger()->log("Ret data: ".print_r($ret, true), $priority);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Ret data: ".print_r($ret, true), $priority);
 		}
 		return $ret;
 	}

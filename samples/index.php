@@ -8,33 +8,45 @@ if(isset($_POST['openid_identifier'])){
 	$default_server = $_COOKIE['openid_sample_default_server'];
 }
 
-
+define ("APPLICATION_PATH", realpath(dirname(__FILE__)."/../"));
 
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/../library');
-require_once("../openid.inc.php");
-require_once("../library/Zend/OpenId/Consumer.php");
-getLogger()->log("Sample page start", Zend_Log::DEBUG);
+require_once(APPLICATION_PATH."/openid.inc.php");
+require_once(APPLICATION_PATH."/library/Zend/OpenId/Consumer.php");
+getLogger()->log("samples/index", Zend_Log::DEBUG);
 
 $defaultUrls = array(
 		"http://".$_SERVER['SERVER_NAME']."/openid",
-		"http://mydevbox.novell.com/openid/",
-		"http://wwwstage.provo.novell.com/openid/",
-		"http://www.novell.com/openid/novell-openid/",
-		"http://www.novell.com/openid/",
-		"http://badurl.provo.novell.com/openid/",
+		"https://".$_SERVER['SERVER_NAME']."/openid",
+		"https://mydevbox.novell.com/openid/",
+		"https://wwwstage.provo.novell.com/openid/",
+		"https://www.novell.com/openid/novell-openid/",
+		"https://www.novell.com/openid/",
+		"https://www.suse.com/openid/",
+		"https://badurl.provo.novell.com/openid/",
 );
 $outputdata = "";
 $status = "";
-if (isset($_POST['openid_action']) &&
+$headers_needed = false;
+if(strlen(iChain_OpenId_User::_getHeader("x-workforceid"))==0){//if headers aren't being sent accross the utility will just loop.
+	$headers_needed = true;
+}
+else if (isset($_POST['openid_action']) &&
 		$_POST['openid_action'] == "login" &&
 		!empty($_POST['openid_identifier'])) {
-	echo "Try to log in";
+	getLogger()->debug("Try to log in");
 	$consumer = new Zend_OpenId_Consumer();
-	if (!$consumer->login($_POST['openid_identifier'])) {
+	getLogger()->debug("Create Cunsumer Object");
+	getLogger()->debug("Login using identifier: ".$_POST['openid_identifier']);
+	$login_reault = $consumer->login($_POST['openid_identifier']);
+	if (!$login_reault) {
+		getLogger()->debug("set status to login failed");
 		$status = "OpenID login failed.";
+	} else {
+		getLogger()->debug("login successful");
 	}
 } else if (isset($_GET['openid_mode'])) {
-	echo "Authenticate Result";
+	getLogger()->debug("Authenticate Result");
 	if ($_GET['openid_mode'] == "id_res") {
 		$consumer = new Zend_OpenId_Consumer();
 		$id = "";
@@ -46,6 +58,7 @@ if (isset($_POST['openid_action']) &&
 			$status = "INVALID at " . htmlspecialchars($id);
 			$status .="<br>Error: ".$consumer->getError();
 		}
+		getLogger()->debug("Status: ".$status);
 		$outputdata .= "id = ".$id;
 	} else if ($_GET['openid_mode'] == "cancel") {
 	}
@@ -68,6 +81,9 @@ if (isset($_POST['openid_action']) &&
 			</select> <input type="submit" name="openid_action" value="login" />
 		</fieldset>
 	</form>
+	<?php if($headers_needed):?>
+		<p style="color:red;">Warning: headers need to be set before you can use this utility. Please use a plug-in like Modify Headers to mock out your header information if your running this locally.</p>
+	<?php endif;?>
 	<h2>How to Test</h2>
 	<p>To test the openid login download it from the repository and install on your local machine.</p>
 	<p>Update your local hosts file with the following. This will allow you to see your local machine as a subdomain.</p>
@@ -83,17 +99,18 @@ if (isset($_POST['openid_action']) &&
 </pre>
 	<p>Then use the following links to view your local implimentor</p>
 	<ul>
-		<li><a href="http://mydevbox.novell.com/openid/samples/">mydevbox.novell.com</a></li>
-		<li><a href="http://mydevbox.opensuse.org/openid/samples/">mydevbox.opensuse.org</a></li>
-		<li><a href="http://mydevbox.suse.com/openid/samples/">mydevbox.suse.com</a></li>
-		<li><a href="http://mydevbox.susestudio.com/openid/samples/">mydevbox.susestudio.com</a></li>
-		<li><a href="http://mydevbox.suse.de/openid/samples/"> mydevbox.suse.de</a></li>
-		<li><a href="http://mydevbox.suse.cz/openid/samples/">mydevbox.suse.cz</a></li>
-		<li><a href="http://mydevbox.qa.suse.cz/openid/samples/">mydevbox.qa.suse.cz</a></li>
-		<li><a href="http://happy-customer.heroku.com/openid/samples/">happy-customer.heroku.com</a></li>
+		<li><a href="https://mydevbox.novell.com/openid/samples/">mydevbox.novell.com</a></li>
+		<li><a href="https://mydevbox.opensuse.org/openid/samples/">mydevbox.opensuse.org</a></li>
+		<li><a href="https://mydevbox.suse.com/openid/samples/">mydevbox.suse.com</a></li>
+		<li><a href="https://mydevbox.susestudio.com/openid/samples/">mydevbox.susestudio.com</a></li>
+		<li><a href="https://mydevbox.suse.de/openid/samples/"> mydevbox.suse.de</a></li>
+		<li><a href="https://mydevbox.suse.cz/openid/samples/">mydevbox.suse.cz</a></li>
+		<li><a href="https://mydevbox.qa.suse.cz/openid/samples/">mydevbox.qa.suse.cz</a></li>
+		<li><a href="https://happy-customer.heroku.com/openid/samples/">happy-customer.heroku.com</a></li>
 	</ul>
 	<p>If everything is setup correctly you should see a "Authenticate Result VALID" result at the top.
-
+	
+	
 </body>
 </html>
 

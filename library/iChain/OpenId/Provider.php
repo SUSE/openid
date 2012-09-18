@@ -14,7 +14,7 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 		if(isset($logger)){
 			$userString = print_r($user, true);
 			$storageString = print_r($storage, true);
-			getLogger()->log("Provider Init: \nloginUrl: ".$loginUrl."\ntrustUrl: ".$trustUrl."\nuser: ".$userString."\nstorage: ".$storageString."\nsessionTtl:".$sessionTtl, Zend_Log::DEBUG);	
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: \nloginUrl: ".$loginUrl."\ntrustUrl: ".$trustUrl."\nuser: ".$userString."\nstorage: ".$storageString."\nsessionTtl:".$sessionTtl, Zend_Log::DEBUG);	
 		}
 		
 		if ($user === null) {
@@ -30,7 +30,7 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 	{
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log("Storage Constructed", Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Storage Constructed", Zend_Log::DEBUG);
 		}
 		$user = $this->getLoggedInUser();
 		if ($user) {
@@ -43,7 +43,7 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 	public function getSiteRoot($params)
 	{
 		$site = parent::getSiteRoot($params);
-		getLogger()->log("iChain_Openid_Provider->getSiteRoot. Return ".$site, Zend_Log::DEBUG);
+		getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Return ".$site, Zend_Log::DEBUG);
 		return $site;
 	}
 }

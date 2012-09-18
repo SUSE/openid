@@ -3,12 +3,12 @@ require_once 'openid.inc.php';
 getLogger()->log("index", Zend_Log::DEBUG);
 header('Content-Type: text/html; charset=UTF-8');
 $endpoint = Zend_OpenId::absoluteUrl('/openid/endpoint.php');
+getLogger()->log("endpoint: ".$endpoint, Zend_Log::DEBUG);
 $localid = null;
 if (isset($_SERVER['PATH_INFO'])) {
 	$localid = Zend_OpenId::absoluteUrl('user/'.ltrim($_SERVER['PATH_INFO'],'/'));
+	getLogger()->log("localid: ".$localid, Zend_Log::DEBUG);
 }
-getLogger()->log("endpoint: ".$endpoint, Zend_Log::DEBUG);
-getLogger()->log("localid: ".$localid, Zend_Log::DEBUG);
 ?>
 <html>
 <head>
@@ -19,7 +19,6 @@ getLogger()->log("localid: ".$localid, Zend_Log::DEBUG);
 <?php } ?>
 </head>
 <body>
-<p>You should not be seeing this.</p>
-<p>Localid; <?php echo $localid;?>
+	<p>You should not be seeing this.</p>
 </body>
 </html>

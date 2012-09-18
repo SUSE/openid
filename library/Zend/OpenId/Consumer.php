@@ -311,7 +311,7 @@ class Zend_OpenId_Consumer
                         $this->_setError("Normalization failed");
                         return false;
                     } else if (!$this->_discovery($id, $discovered_server, $discovered_version)) {
-                    	getLogger()->log("Discovery failed at point 1: id: ".$id." discovered_server: ".print_r($discovered_server, true)." discovered_version: ".print_r($discovered_version, true), Zend_Log::DEBUG);
+                    	getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Discovery failed at point 1: id: ".$id." discovered_server: ".print_r($discovered_server, true)." discovered_version: ".print_r($discovered_version, true), Zend_Log::DEBUG);
                         $this->_setError("Discovery failed: " . $this->getError());
                         return false;
                     } else if ((!empty($params['openid_identity']) &&
@@ -319,6 +319,16 @@ class Zend_OpenId_Consumer
                                (!empty($params['openid_op_endpoint']) &&
                                 $params['openid_op_endpoint'] != $discovered_server) ||
                                $discovered_version != $version) {
+                    	getLogger()->debug(__CLASS__."->".__FUNCTION__." ln(".__LINE__."): Discovery information verification failed");
+                    	getLogger()->debug("openid_identity!=id:");
+                    	getLogger()->debug("params[openid_identity] :".$params["openid_identity"]);
+                    	getLogger()->debug("id :                     ".$id);
+                    	getLogger()->debug("params['openid_op_endpoint'] != discovered_server");
+                    	getLogger()->debug("params['openid_op_endpoint'] :".$params['openid_op_endpoint']);
+                    	getLogger()->debug("discovered_server :           ".$discovered_server);
+                    	getLogger()->debug("discovered_version != version");
+                    	getLogger()->debug("discovered_version :".$discovered_version);
+                    	getLogger()->debug("version :           ".$version);
                         $this->_setError("Discovery information verification failed");
                         return false;
                     }
@@ -345,7 +355,7 @@ class Zend_OpenId_Consumer
                 $this->_setError("Normalization failed");
                 return false;
             } else if (!$this->_discovery($id, $server, $discovered_version)) {
-            	getLogger()->log("Discovery failed at point b: id: ".$id." server: ".print_r($server, true)." discovered_version: ".print_r($discovered_version, true), Zend_Log::DEBUG);
+            	getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Discovery failed at point b: id: ".$id." server: ".print_r($server, true)." discovered_version: ".print_r($discovered_version, true), Zend_Log::DEBUG);
             	$this->_setError("Discovery failed: " . $this->getError());
                 return false;
             }
@@ -509,7 +519,7 @@ class Zend_OpenId_Consumer
             $this->_setError('HTTP Request failed: ' . $e->getMessage());
             return false;
         }
-        getLogger()->log("response: ".print_r($response, true), Zend_Log::DEBUG);
+        getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): response: ".print_r($response, true), Zend_Log::DEBUG);
         $status = $response->getStatus();
         $body = $response->getBody();
         if ($status == 200 || ($status == 400 && !empty($body))) {
@@ -827,7 +837,7 @@ class Zend_OpenId_Consumer
         $claimedId = $id;
 
         if (!$this->_discovery($id, $server, $version)) {
-            getLogger()->log("Discovery failed at point C: id: ".$id." discovered_server: ".print_r($server, true)." discovered_version: ".print_r($discovered_version, true), Zend_Log::DEBUG);
+            getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Discovery failed at point C: id: ".$id." discovered_server: ".print_r($server, true), Zend_Log::DEBUG);
         	$this->_setError("Discovery failed: " . $this->getError());
             return false;
         }

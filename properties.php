@@ -21,10 +21,16 @@ define ("LOG_PRIORITY", 7);
 define ("LOG_FILE", APPLICATION_PATH."/openidwrapper.log");
 define ("ERROR_LEVEL", E_ALL);
 
+if($_SERVER['HTTPS']=='on'){
+	define("HTTP_HOST", "https://");
+} else {
+	define("HTTP_HOST", "http://");
+}
 
-define ("OPENID_SERVER", "apexedi.cougarpc.net");
-define ("OPENID_USERNAME", "n0v3110p3n1ds3rv3r@n0v311.c0m");
-define ("OPENID_PASSWORD", "sup3rs3cur3p@ssw0rd4n0v3110p3n1ds3rv3r@n0v311.c0m");
+
+//define ("OPENID_SERVER", "apexedi.cougarpc.net");
+//define ("OPENID_USERNAME", "n0v3110p3n1ds3rv3r@n0v311.c0m");
+//define ("OPENID_PASSWORD", "sup3rs3cur3p@ssw0rd4n0v3110p3n1ds3rv3r@n0v311.c0m");
 
 /**
  * This olds a static list of authorized sites. a test for "novell.com" will match "www.novell.com" or "innerweb.novell.com" etc. 
@@ -60,3 +66,4 @@ define ("HEADER_USERID", "x-webidsynchid");
 define ("HEADER_EMAIL", "x-email");
 define ("HEADER_FIRST_NAME", "x-firstname");
 define ("HEADER_LAST_NAME", "x-lastname");
+//print_r($_SERVER);

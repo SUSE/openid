@@ -1,6 +1,9 @@
 <?php
 /* Add our library path */
-define("APPLICATION_PATH", dirname(__FILE__));
+if(!defined("APPLICATION_PATH")){
+	define("APPLICATION_PATH", dirname(__FILE__));	
+}
+
 error_reporting(E_ALL ^ E_NOTICE);
 add_include_path(APPLICATION_PATH . '/library');
 require_once(APPLICATION_PATH."/properties.php");
@@ -34,13 +37,14 @@ function getLogger(){
 	global $logger;
 	if(!isset($logger)){
 		$writer = new Zend_Log_Writer_Stream(LOG_FILE);
+		$formatter = new Zend_Log_Formatter_Simple();
+		$writer->setFormatter($formatter);
 		$logger = new Zend_Log($writer);
 		$filter = new Zend_Log_Filter_Priority(LOG_PRIORITY);
 		$logger->addFilter($filter);
 	}
 	return $logger;
 }
-
 
 function myExceptionHandler($exception) {
 	$exceptionString = print_r($exception, true);
@@ -49,9 +53,14 @@ function myExceptionHandler($exception) {
 }
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
 	getLogger()->log("Error (".$errno.") ".$errstr." in ".$errfile." (".$errline.")", Zend_Log::ERR);
+	$backtrace = debug_backtrace();
+	array_shift($backtrace);
+	foreach($backtrace as $key=>$stack){
+		getLogger()->debug("(".$key.") ".$stack['function']."(".$stack['line'].") ".$stack['file']);
+	}
 }
-//set_exception_handler('myExceptionHandler');
-//set_error_handler('myErrorHandler', ERROR_LEVEL);
+set_exception_handler('myExceptionHandler');
+set_error_handler('myErrorHandler', ERROR_LEVEL);
 
 
 require_once 'Zend/Log.php';
@@ -65,6 +74,9 @@ require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 require_once 'iChain/OpenId/Sreg.php';
 
-getLogger()->info("\n\n\n\n\nApplication Start: Request URl: ".$_SERVER['REQUEST_URI']."\nApplication Path: ".APPLICATION_PATH."\nInclude Path: ".print_r(explode(PATH_SEPARATOR, get_include_path()), true));
+sleep(1);//sleep to avoid overlapping of requests
+getLogger()->info("###################### Application Start ########################");
+getLogger()->debug("Request URl: ".$_SERVER['REQUEST_URI']);
+getLogger()->debug("Application Path: ".APPLICATION_PATH);
 
 ?>

@@ -423,6 +423,7 @@ class Zend_OpenId
     static public function redirect($url, $params = null,
         Zend_Controller_Response_Abstract $response = null, $method = 'GET')
     {
+    	//getLogger()->debug("#### Redirect to ".$url);
         $url = Zend_OpenId::absoluteUrl($url);
         $body = "";
         if (null === $response) {

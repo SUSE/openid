@@ -6,7 +6,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function __construct(){
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log("Storage Constructed", Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Storage Constructed", Zend_Log::DEBUG);
 		}
 		parent::__construct();
 	}
@@ -14,7 +14,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function addUser($id, $password) {
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log('iChain OpenID addUser called: '.E_USER_WARNING, Zend_Log::ERR);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): addUser called: ".E_USER_WARNING, Zend_Log::ERR);
 		}
 		trigger_error('iChain OpenID addUser called', E_USER_WARNING);
 		return false;
@@ -24,7 +24,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function hasUser($id) {
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log('iChain OpenID hasUser called: '.E_USER_WARNING, Zend_Log::INFO);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): ".E_USER_WARNING, Zend_Log::INFO);
 		}
 		return true;
 	}
@@ -33,7 +33,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function checkUser($id, $password) {
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log('iChain OpenID checkUser called '.E_USER_WARNING, Zend_Log::ERR);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): iChain OpenID checkUser called ".E_USER_WARNING, Zend_Log::ERR);
 		}
 		trigger_error('iChain OpenID checkUser called', E_USER_WARNING);
 		return false;
@@ -59,7 +59,7 @@ class iChain_OpenId_Storage extends Zend_OpenId_Provider_Storage_File
 	public function addSite($id, $site, $trusted) {
 		global $logger;
 		if(isset($logger)){
-			getLogger()->log('iChain OpenID addSite called '.E_USER_WARNING, Zend_Log::ERR);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): iChain OpenID addSite called ".E_USER_WARNING, Zend_Log::ERR);
 		}
 		trigger_error('iChain OpenID addSite called', E_USER_WARNING);
 		return false;
