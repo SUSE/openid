@@ -28,7 +28,7 @@ $defaultUrls = array(
 $outputdata = "";
 $status = "";
 $headers_needed = false;
-if(strlen(iChain_OpenId_User::_getHeader("x-workforceid"))==0){//if headers aren't being sent accross the utility will just loop.
+if(strlen(iChain_OpenId_User::_getHeader(HEADER_USERNAME))==0){//if headers aren't being sent accross the utility will just loop.
 	$headers_needed = true;
 }
 else if (isset($_POST['openid_action']) &&
