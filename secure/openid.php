@@ -1,9 +1,9 @@
 <?php
-exit();
 require_once '../openid.inc.php';
 if(isset($logger)){
 	getLogger()->log("secure/openid", Zend_Log::DEBUG);	
 }
+exit();
 
 //$session = $client->GetSession($username,$password,$_REQUEST["key"]);
 //$key = $client->GetKey($username,$password,$_REQUEST["key"]);

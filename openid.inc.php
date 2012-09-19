@@ -74,7 +74,6 @@ require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 require_once 'iChain/OpenId/Sreg.php';
 
-sleep(1);//sleep to avoid overlapping of requests
 getLogger()->info("###################### Application Start ########################");
 getLogger()->debug("Request URl: ".$_SERVER['REQUEST_URI']);
 getLogger()->debug("Application Path: ".APPLICATION_PATH);

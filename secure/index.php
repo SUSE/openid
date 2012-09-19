@@ -16,7 +16,7 @@ getLogger()->log("isUserTrusted: ".($isloggedin?"true":"false")." websyncid: ".$
 if ( !($isloggedin) ){
 	//user is not logged in, redirect to login page.
 	setcookie("openid", $_SERVER['REQUEST_URI'], 0, "/openid/", "novell.com");
-	$url = HTTP_HOST.$_SERVER['SERVER_NAME'].'/common/util/secure/login.php?r=http://'.$_SERVER['SERVER_NAME'].'/openid/secure/';
+	$url = HTTP_HOST.$_SERVER['SERVER_NAME'].'/common/util/secure/login.php?r='.HTTP_HOST.$_SERVER['SERVER_NAME'].'/openid/secure/';
 	getLogger()->log("Not Logged in, redirect to: ".$url, Zend_Log::DEBUG);
 	header( 'Location: ' .$url ) ;
 }
