@@ -31,7 +31,7 @@ $headers_needed = false;
 if(strlen(iChain_OpenId_User::_getHeader(HEADER_USERNAME))==0){//if headers aren't being sent accross the utility will just loop.
 	$headers_needed = true;
 }
-else if (isset($_POST['openid_action']) &&
+if (isset($_POST['openid_action']) &&
 		$_POST['openid_action'] == "login" &&
 		!empty($_POST['openid_identifier'])) {
 	getLogger()->debug("Try to log in");
