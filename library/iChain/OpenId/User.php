@@ -18,7 +18,11 @@ class iChain_OpenId_User extends Zend_OpenId_Provider_User
 		}
 		$h = strtolower($h);
 		$response = isset($headers[$h]) ? $headers[$h] : false;
-		getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): header requested: ".$h." found: ".$response, Zend_Log::DEBUG);		
+		getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): header requested: ".$h." found: ".$response, Zend_Log::DEBUG);
+		if(empty($response)){
+			getLogger()->err(__CLASS__." ".__FUNCTION__." (".__LINE__."): Requested Header not found: ".$h);
+			getLogger()->debug(__CLASS__." ".__FUNCTION__." (".__LINE__."): Available headers: ".print_r($headers, true));
+		}		
 		return $response;
 	}
 

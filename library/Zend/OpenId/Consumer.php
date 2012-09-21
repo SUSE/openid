@@ -748,7 +748,9 @@ class Zend_OpenId_Consumer
         /* HTML-based discovery */
         $response = $this->_httpRequest($id, 'GET', array(), $status);
         if ($status != 200 || !is_string($response)) {
-            return false;
+        	getLogger()->debug(__CLASS__." ".__FUNCTION__." (".__LINE__."): Status: ".$status);
+        	getLogger()->debug(__CLASS__." ".__FUNCTION__." (".__LINE__."): response: ".$response);
+        	return false;
         }
         if (preg_match(
                 '/<link[^>]*rel=(["\'])[ \t]*(?:[^ \t"\']+[ \t]+)*?openid2.provider[ \t]*[^"\']*\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i',
@@ -775,6 +777,7 @@ class Zend_OpenId_Consumer
             $version = 1.1;
             $server = $r[2];
         } else {
+        	getLogger()->debug(__CLASS__." ".__FUNCTION__." (".__LINE__."): None of the pattern matched: ".$response);
             return false;
         }
         if ($version >= 2.0) {

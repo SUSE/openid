@@ -10,7 +10,7 @@ if(isset($_POST['openid_identifier'])){
 
 define ("APPLICATION_PATH", realpath(dirname(__FILE__)."/../"));
 
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/../library');
+set_include_path(get_include_path() . PATH_SEPARATOR .  realpath(dirname(__FILE__)).'/../library');
 require_once(APPLICATION_PATH."/openid.inc.php");
 require_once(APPLICATION_PATH."/library/Zend/OpenId/Consumer.php");
 getLogger()->log("samples/index", Zend_Log::DEBUG);

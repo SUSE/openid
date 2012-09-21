@@ -14,13 +14,19 @@ class iChain_OpenId_Provider extends Zend_OpenId_Provider
 		if(isset($logger)){
 			$userString = print_r($user, true);
 			$storageString = print_r($storage, true);
-			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: \nloginUrl: ".$loginUrl."\ntrustUrl: ".$trustUrl."\nuser: ".$userString."\nstorage: ".$storageString."\nsessionTtl:".$sessionTtl, Zend_Log::DEBUG);	
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: loginUrl: ".$loginUrl, Zend_Log::DEBUG);	
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: trustUrl: ".$trustUrl, Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: user: ".$userString, Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: storage: ".$storageString, Zend_Log::DEBUG);
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Provider Init: sessionTtl:".$sessionTtl, Zend_Log::DEBUG);
 		}
 		
 		if ($user === null) {
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Create User: ", Zend_Log::DEBUG);
 			$user = new iChain_OpenId_User();
 		}
 		if ($storage === null) {
+			getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): Create Storage: ", Zend_Log::DEBUG);
 			$storage = new iChain_OpenId_Storage();
 		}
 		parent::__construct($loginUrl, $trustUrl, $user, $storage, $sessionTtl);
