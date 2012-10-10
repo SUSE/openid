@@ -8,7 +8,7 @@ if ( isset($_SERVER['HTTP_X_WEBIDSYNCHID']) && $_SERVER['HTTP_X_WEBIDSYNCHID'] !
 } else if($websyncid!=""){
 	$isloggedin = true;
 } else if($_SERVER['SERVER_NAME']=="localhost"){
-	$isloggedin = true;
+	// $isloggedin = true;
 }
 getLogger()->log("isUserTrusted: ".($isloggedin?"true":"false")." websyncid: ".$websyncid, Zend_Log::DEBUG);
 
