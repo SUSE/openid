@@ -514,6 +514,7 @@ class Zend_OpenId_Consumer
         }
 
         try {
+            getLogger()->log(__CLASS__." ".__FUNCTION__." (".__LINE__."): requesting: " . $url . " params: " . print_r($params, true), Zend_Log::INFO);
             $response = $client->request();
         } catch (Exception $e) {
             $this->_setError('HTTP Request failed: ' . $e->getMessage());

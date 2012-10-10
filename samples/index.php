@@ -13,13 +13,16 @@ define ("APPLICATION_PATH", realpath(dirname(__FILE__)."/../"));
 set_include_path(get_include_path() . PATH_SEPARATOR .  realpath(dirname(__FILE__)).'/../library');
 require_once(APPLICATION_PATH."/openid.inc.php");
 require_once(APPLICATION_PATH."/library/Zend/OpenId/Consumer.php");
+require_once(APPLICATION_PATH."/library/Zend/OpenId/Consumer/Storage/File.php");
 getLogger()->log("samples/index", Zend_Log::DEBUG);
 
 $defaultUrls = array(
 		"http://".$_SERVER['SERVER_NAME']."/openid",
 		"https://".$_SERVER['SERVER_NAME']."/openid",
 		"https://mydevbox.novell.com/openid/",
+                "http://wwwstage.provo.novell.com/openid/",
 		"https://wwwstage.provo.novell.com/openid/",
+                "https://wwwstage.suse.com/openid/",
 		"https://www.novell.com/openid/novell-openid/",
 		"https://www.novell.com/openid/",
 		"https://www.suse.com/openid/",
@@ -34,24 +37,24 @@ if(strlen(iChain_OpenId_User::_getHeader(HEADER_USERNAME))==0){//if headers aren
 if (isset($_POST['openid_action']) &&
 		$_POST['openid_action'] == "login" &&
 		!empty($_POST['openid_identifier'])) {
-	getLogger()->debug("Try to log in");
-	$consumer = new Zend_OpenId_Consumer();
-	getLogger()->debug("Create Cunsumer Object");
-	getLogger()->debug("Login using identifier: ".$_POST['openid_identifier']);
-	$login_reault = $consumer->login($_POST['openid_identifier']);
-	if (!$login_reault) {
-		getLogger()->debug("set status to login failed");
+        $storage = new Zend_OpenId_Consumer_Storage_File();
+	$consumer = new Zend_OpenId_Consumer($storage);
+	getLogger()->debug("Starting login at: ".$_POST['openid_identifier']);
+	$login_result = $consumer->login($_POST['openid_identifier']);
+	if (!$login_result) {
+		getLogger()->debug("Login failed");
 		$status = "OpenID login failed.";
 	} else {
-		getLogger()->debug("login successful");
+		getLogger()->debug("Login successful: " . $login_result);
 	}
 } else if (isset($_GET['openid_mode'])) {
 	getLogger()->debug("Authenticate Result");
 	if ($_GET['openid_mode'] == "id_res") {
-		$consumer = new Zend_OpenId_Consumer();
+                $storage = new Zend_OpenId_Consumer_Storage_File(); 
+		$consumer = new Zend_OpenId_Consumer($storage);
 		$id = "";
-		$outputdata .="Verify Cunsumer: id: ".$id." params: ".print_r($_GET, true);
-		$outputdata .= print_r($consumer, true);
+		//getLogger()->debug("Verify request: ".print_r($_GET, true));
+		//getLogger()->debug(print_r($consumer, true));
 		if ($consumer->verify($_GET, $id)) {
 			$status = "VALID at " . htmlspecialchars($id);
 		} else {
@@ -59,7 +62,6 @@ if (isset($_POST['openid_action']) &&
 			$status .="<br>Error: ".$consumer->getError();
 		}
 		getLogger()->debug("Status: ".$status);
-		$outputdata .= "id = ".$id;
 	} else if ($_GET['openid_mode'] == "cancel") {
 	}
 }
@@ -69,7 +71,7 @@ if (isset($_POST['openid_action']) &&
 <html>
 <body>
 	<?php echo "$status<br>" ?>
-	<form method="post">
+	<form method="post" action="index.php?login">
 		<fieldset>
 			<legend>Set login server:</legend>
 			<select type=select name="openid_identifier">

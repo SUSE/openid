@@ -1,6 +1,5 @@
 <?php
 require_once 'openid.inc.php';
-getLogger()->log("endpoint", Zend_Log::DEBUG);
 $provider = new iChain_OpenId_Provider('secure/', 'trust.php');
 
 $sreg = new iChain_OpenId_Sreg(array(
@@ -13,9 +12,10 @@ $sreg = new iChain_OpenId_Sreg(array(
         'email' => iChain_OpenId_User::_getHeader(HEADER_EMAIL)
     ));
 
-getLogger()->log("endpoint-- get: ".print_r($_GET, true), Zend_Log::DEBUG);
-getLogger()->log("endpoint-- post: ".print_r($_POST, true), Zend_Log::DEBUG);
-getLogger()->log("endpoint-- sreg: ".print_r($sreg, true), Zend_Log::DEBUG);
+getLogger()->log("Endpoint contacted with:", Zend_Log::DEBUG);
+getLogger()->log("GET parameters: ".print_r($_GET, true), Zend_Log::DEBUG);
+getLogger()->log("POST parameters: ".print_r($_POST, true), Zend_Log::DEBUG);
+getLogger()->log("Created SREG: ".print_r($sreg, true), Zend_Log::DEBUG);
 
 $ret = $provider->handle(null, $sreg);
 

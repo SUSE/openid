@@ -55,7 +55,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 	getLogger()->log("Error (".$errno.") ".$errstr." in ".$errfile." (".$errline.")", Zend_Log::ERR);
 	$backtrace = debug_backtrace();
 	array_shift($backtrace);
-	getLogger()->err("Debug backtrace".print_r($backtrace, true));
+	//getLogger()->err("Debug backtrace".print_r($backtrace, true));
 }
 set_exception_handler('myExceptionHandler');
 set_error_handler('myErrorHandler', ERROR_LEVEL);
@@ -72,10 +72,10 @@ require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 require_once 'iChain/OpenId/Sreg.php';
 
-getLogger()->info("###################### Application Start ########################");
-getLogger()->debug("Request URl: ".$_SERVER['REQUEST_URI']);
+getLogger()->info("###################### Request start ########################");
+getLogger()->debug("Requested URl: ".$_SERVER['REQUEST_URI']);
 if(isset($_SERVER['HTTP_REFERER'])){
-	getLogger()->debug("Request URl: ".$_SERVER['HTTP_REFERER']);
+	getLogger()->debug("Referrer: ".$_SERVER['HTTP_REFERER']);
 }
 getLogger()->debug("Application Path: ".APPLICATION_PATH);
 

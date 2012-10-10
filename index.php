@@ -1,9 +1,7 @@
 <?php
 require_once 'openid.inc.php';
-getLogger()->log("index", Zend_Log::DEBUG);
 header('Content-Type: text/html; charset=UTF-8');
 $endpoint = Zend_OpenId::absoluteUrl('/openid/endpoint.php');
-getLogger()->log("endpoint: ".$endpoint, Zend_Log::DEBUG);
 $localid = null;
 if (isset($_SERVER['PATH_INFO'])) {
 	$localid = Zend_OpenId::absoluteUrl('user/'.ltrim($_SERVER['PATH_INFO'],'/'));
@@ -19,6 +17,6 @@ if (isset($_SERVER['PATH_INFO'])) {
 <?php } ?>
 </head>
 <body>
-	<p>You should not be seeing this.</p>
+	<p>Novell OpenId Provider: <?php echo $endpoint; ?></p>
 </body>
 </html>
