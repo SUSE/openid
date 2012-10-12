@@ -90,8 +90,11 @@ class Zend_OpenId
     {
         if (self::$selfUrl !== null) {
             return self::$selfUrl;
-        } if (isset($_SERVER['SCRIPT_URI'])) {
-            return $_SERVER['SCRIPT_URI'];
+        //} if (isset($_SERVER['SCRIPT_URI'])) {
+            //return $_SERVER['SCRIPT_URI'];
+        }
+	if(isset($_SERVER['SCRIPT_URI'])){
+              getLogger()->debug("/Zend/OpenId script_URI set: ".$_SERVER['SCRIPT_URI']);
         }
         $url = '';
         $port = '';
@@ -111,11 +114,13 @@ class Zend_OpenId
                 $port = ':' . $_SERVER['SERVER_PORT'];
             }
         }
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+        //getLogger("/Zend/OpenId is https: ".$_SERVER['HTTPS']);
+        //if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+        if(HTTP_HOST=="https://"){
             $url = 'https://' . $url;
-            if ($port == ':443') {
+            //if ($port == ':443') {
                 $port = '';
-            }
+            //}
         } else {
             $url = 'http://' . $url;
             if ($port == ':80') {

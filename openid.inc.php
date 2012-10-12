@@ -6,6 +6,7 @@ if(!defined("APPLICATION_PATH")){
 
 error_reporting(E_ALL ^ E_NOTICE);
 add_include_path(APPLICATION_PATH . '/library');
+
 require_once(APPLICATION_PATH."/properties.php");
 /* Ensure we have PATH_SEPARATOR defined */
 if (!defined('PATH_SEPARATOR')) {
@@ -72,11 +73,23 @@ require_once 'iChain/OpenId/User.php';
 require_once 'iChain/OpenId/Storage.php';
 require_once 'iChain/OpenId/Sreg.php';
 
+//see if there is a secure connection or not
+$https = iChain_OpenId_User::_getHeader("X-Forwarded-Proto");
+if($https=="https"){
+     define("HTTP_HOST", "https://");
+     $_SERVER['https'] = 'on';  
+} else {
+     define("HTTP_HOST", "http://");
+}
+if(isset($_SERVER['SCRIPT_URI'])){
+     unset($_SERVER['SCRIPT_URI']);
+}
+
 getLogger()->info("###################### Request start ########################");
 getLogger()->debug("Requested URl: ".$_SERVER['REQUEST_URI']);
 if(isset($_SERVER['HTTP_REFERER'])){
 	getLogger()->debug("Referrer: ".$_SERVER['HTTP_REFERER']);
 }
 getLogger()->debug("Application Path: ".APPLICATION_PATH);
-
+getLogger()->debug("Secure Connection: ".HTTP_HOST);
 ?>

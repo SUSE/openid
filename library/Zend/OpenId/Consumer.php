@@ -382,6 +382,7 @@ class Zend_OpenId_Consumer
                 $params2[$key] = $val;
             }
             $params2['openid.mode'] = 'check_authentication';
+            getLogger("HttpRequest Point ln 385");
             $ret = $this->_httpRequest($server, 'POST', $params2, $status);
             if ($status != 200) {
                 $this->_setError("'Dumb' signature verification HTTP request failed");
@@ -543,7 +544,7 @@ class Zend_OpenId_Consumer
      */
     protected function _associate($url, $version, $priv_key=null)
     {
-
+	getLogger()->debug("Start Associate");
         /* Check if we already have association in chace or storage */
         if ($this->_getAssociation(
                 $url,
@@ -579,6 +580,7 @@ class Zend_OpenId_Consumer
         $dh = Zend_OpenId::createDhKey(pack('H*', Zend_OpenId::DH_P),
                                        pack('H*', Zend_OpenId::DH_G),
                                        $priv_key);
+        getLogger()->debug("Create HD Key");
         $dh_details = Zend_OpenId::getDhKeyDetails($dh);
 
         $params['openid.dh_modulus']         = base64_encode(
@@ -589,6 +591,7 @@ class Zend_OpenId_Consumer
             Zend_OpenId::btwoc($dh_details['pub_key']));
 
         while(1) {
+            getLogger()->debug("Zend.OpenId.Consumer httprequest point b");
             $ret = $this->_httpRequest($url, 'POST', $params, $status);
             if ($ret === false) {
                 $this->_setError("HTTP request failed");

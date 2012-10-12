@@ -3,6 +3,8 @@ require_once 'openid.inc.php';
 header('Content-Type: text/html; charset=UTF-8');
 $endpoint = Zend_OpenId::absoluteUrl('/openid/endpoint.php');
 $localid = null;
+getLogger()->debug("/index.endpoint: ".$endpoint." HTTP_HOST: ".HTTP_HOST);
+
 if (isset($_SERVER['PATH_INFO'])) {
 	$localid = Zend_OpenId::absoluteUrl('user/'.ltrim($_SERVER['PATH_INFO'],'/'));
 	getLogger()->log("localid: ".$localid, Zend_Log::DEBUG);

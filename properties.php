@@ -16,16 +16,10 @@
  const DEBUG   = 7;  // Debug: debug messages
  * @var unknown_type
  */
-define ("LOG_PRIORITY", 7);
+define ("LOG_PRIORITY", 4);
 //define ("LOG_FILE", "/var/log/apps/openid/openidwrapper.log");
 define ("LOG_FILE", APPLICATION_PATH."/openidwrapper.log");
 define ("ERROR_LEVEL", E_ALL);
-
-if($_SERVER['HTTPS']=='on'){
-	define("HTTP_HOST", "https://");
-} else {
-	define("HTTP_HOST", "http://");
-}
 
 
 //define ("OPENID_SERVER", "apexedi.cougarpc.net");
