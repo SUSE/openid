@@ -39,8 +39,8 @@ define ("ERROR_LEVEL", E_ALL);
 class TrustedSites{
 	public static $DOMAINS = array(
 			'novell.com',
-                        'virt.lab.novell.com',
                         'lab.novell.com',
+                        'xen80.virt.lab.novell.com',
 			'opensuse.org',
 			'suse.com',
 			'susestudio.com',
